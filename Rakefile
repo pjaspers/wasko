@@ -16,13 +16,13 @@ Jeweler::Tasks.new do |gem|
   gem.homepage = "http://github.com/pjaspers/wasko"
   gem.license = "MIT"
   gem.summary = %Q{Set your (OS X) terminal background from the command line}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "junkiesxl@gmail.com"
+  gem.description = %Q{Quick tool to set a color palette to your Terminal}
+  gem.email = "piet@10to1.be"
   gem.authors = ["pjaspers"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
-  #  gem.add_runtime_dependency 'jabber4r', '> 0.1'
-  #  gem.add_development_dependency 'rspec', '> 1.2.3'
+   gem.add_runtime_dependency 'color'
+   gem.add_development_dependency 'thor'
 end
 Jeweler::RubygemsDotOrgTasks.new
 
