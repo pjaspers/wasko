@@ -37,7 +37,7 @@ module Wasko
 
     desc "list", "Lists all available colors"
     def list
-      say colors.join("\n")
+      say Wasko.colors.join("\n")
     end
 
   end
