@@ -14,6 +14,7 @@ module Wasko
     map "-C" => :color
     map "-D" => :css
     map "-p" => :palette
+    map "-w" => :save_color
 
     desc "palette", "Sets both back and foreground color adjusted to supplied hex_color"
     def palette(hex_color)
@@ -34,6 +35,14 @@ module Wasko
       Wasko.draw_css_color hex_color
     end
 
+    desc "save_color NAME", "Saves current scheme to ~/.wasko"
+    def save_color(name)
+      rgbs = {
+        :background => "{#{Wasko.current_background_color}}",
+        :foreground => "{#{Wasko.current_normal_text_color}}"
+      }
+      Wasko.save_color_to_config(rgbs, name)
+    end
 
     desc "list", "Lists all available colors"
     def list

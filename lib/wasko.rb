@@ -1,4 +1,5 @@
 require "color/palette/monocontrast"
+require "yaml"
 
 module Wasko
   class << self
@@ -101,10 +102,49 @@ end tell
 SCRIPT
     end
 
+    def current_background_color
+      script = <<SCRIPT
+tell application "Terminal"
+  get background color of current settings of selected tab of first window
+end tell
+SCRIPT
+      run_applescript(script).gsub("\n", '')
+    end
+
+    def current_normal_text_color
+      script = <<SCRIPT
+tell application "Terminal"
+  get normal text color of current settings of selected tab of first window
+end tell
+SCRIPT
+      run_applescript(script).gsub("\n", '')
+    end
+
     # Run the applescript from the command line.
     def run_applescript(script)
       `/usr/bin/osascript -e "#{script.gsub('"', '\"')}"`
     end
 
+    # # Configuration
+
+    def config_file_exists?
+      File.exists?(File.join(ENV['HOME'],'.wasko'))
+    end
+
+    def config
+      YAML::load(File.open(config_file))["wasko"]
+    end
+
+    def config_file
+      File.join(ENV['HOME'],'.wasko')
+    end
+
+    def save_color_to_config(rgb_values, name)
+      c = config ||= {}
+      c[name] = rgb_values
+      File.open(config_file, 'w') do |out|
+        out.write({"wasko" => c}.to_yaml)
+      end
+    end
   end
 end
