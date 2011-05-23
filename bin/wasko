@@ -1,9 +1,10 @@
 #!/usr/bin/ruby
 
 require "rubygems"
+require "lib/wasko"
 require "thor"
 require "color"
-require "color/palette/monocontrast"
+
 
 module Wasko
   class CLI < Thor
@@ -16,29 +17,21 @@ module Wasko
 
     desc "palette", "Sets both back and foreground color adjusted to supplied hex_color"
     def palette(hex_color)
-      palette = ::Color::Palette::MonoContrast.new(::Color::RGB.from_html(hex_color))
-      background_rgb = color_to_rgb(palette.background[2])
-      foreground_rgb = color_to_rgb(palette.foreground[2])
-
-      run_applescript(script_with_rgb_for_background(background_rgb))
-      run_applescript(script_with_rgb_for_normal_text(foreground_rgb))
+      Wasko.palette_from_color hex_color
     end
 
     desc "color", "Sets background color to one of the named colors"
     def color(color_name="red")
-      if colors.include?(color_name)
-        run_applescript(script_with_color(color_name))
+      if Wasko.colors.include?(color_name)
+        Wasko.draw_named_color(color_name)
       else
-        say "Please pick a color from: [#{colors.join(", ")}]"
+        say "Please pick a color from: [#{Waskocolors.join(", ")}]"
       end
-
     end
 
     desc "css", "Sets background color to the css color"
     def css(hex_color="cc0000")
-      c = ::Color::RGB.from_html(hex_color)
-      rgb_values = color_to_rgb(c)
-      run_applescript(script_with_rgb_for_background(rgb_values))
+      Wasko.draw_css_color hex_color
     end
 
 
@@ -46,45 +39,6 @@ module Wasko
     def list
       say colors.join("\n")
     end
-
-    no_tasks {
-      def color_to_rgb(color, opacity=100)
-        rgb = [color.red.to_i * 257, color.green.to_i * 257, color.blue.to_i * 257, opacity * 65535/100].join(", ")
-        "{#{rgb}}"
-      end
-
-      def colors
-        %w(blue yellow white red orange green black brown cyan purple magenta)
-      end
-
-      def script_with_rgb_for_normal_text(rgb_values)
-        <<SCRIPT
-tell application "Terminal"
-  set normal text color of current settings of selected tab of first window to #{rgb_values}
-end tell
-SCRIPT
-      end
-
-      def script_with_rgb_for_background(rgb_values)
-        <<SCRIPT
-tell application "Terminal"
-  set background color of current settings of selected tab of first window to #{rgb_values}
-end tell
-SCRIPT
-      end
-
-      def script_with_color(color)
-        <<SCRIPT
-tell application "Terminal"
-  set background color of current settings of selected tab of first window to "#{color}"
-end tell
-SCRIPT
-      end
-
-      def run_applescript(script)
-        `/usr/bin/osascript -e "#{script.gsub('"', '\"')}"`
-      end
-    }
 
   end
 end
