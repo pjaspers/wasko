@@ -1,10 +1,9 @@
 #!/usr/bin/ruby
 
+$LOAD_PATH.unshift File.join(File.dirname(__FILE__), '..', 'lib')
 require "rubygems"
-require "lib/wasko"
+require "wasko"
 require "thor"
-require "color"
-
 
 module Wasko
   class CLI < Thor
