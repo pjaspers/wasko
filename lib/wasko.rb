@@ -128,22 +128,38 @@ SCRIPT
     # # Configuration
 
     def config_file_exists?
-      File.exists?(File.join(ENV['HOME'],'.wasko'))
+
     end
 
     def config
-      YAML::load(File.open(config_file))["wasko"]
+      {} unless File.exists?(config_file)
+      if Hash === YAML::load(File.open(config_file))
+        YAML::load(File.open(config_file))[:wasko]
+      else
+        {}
+      end
     end
 
     def config_file
       File.join(ENV['HOME'],'.wasko')
     end
 
+    def saved_colors
+      "" unless config && config[:colors]
+      config[:colors].keys
+    end
+
+    # ## Loading and saving colors
+    def load_color_from_config(name)
+      return unless config && config[:colors] && config[:colors][name]
+      draw_rgb_color config[:colors][name]
+    end
+
     def save_color_to_config(rgb_values, name)
-      c = config ||= {}
-      c[name] = rgb_values
+      colors = config[:colors] rescue {}
+      colors[name] = rgb_values
       File.open(config_file, 'w') do |out|
-        out.write({"wasko" => c}.to_yaml)
+        out.write({:wasko => {:colors => colors}}.to_yaml)
       end
     end
   end
