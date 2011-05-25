@@ -1,6 +1,6 @@
 require "color/palette/monocontrast"
 require "yaml"
-
+require "wasko/applescript"
 module Wasko
   class << self
 
@@ -28,8 +28,11 @@ module Wasko
     end
 
     def draw_named_color(color_name)
-      run_applescript(script_with_color(color_name))
+      Wasko::Applescript.run do
+        script_with_color(color_name)
+      end
     end
+
     # Set background color to one of the named colors
     # available in `AppleScript`.
     def script_with_color(color)
@@ -78,11 +81,15 @@ SCRIPT
     #     Wasko.draw_rgb_color(:foreground => {65535, 65535,65535, 655535})
     def draw_rgb_color(color_hash)
       if color_hash[:background]
-        run_applescript(script_with_rgb_for_background(color_hash[:background]))
+        Wasko::Applescript.run do
+          script_with_rgb_for_background(color_hash[:background])
+        end
       end
 
       if color_hash[:foreground]
-        run_applescript(script_with_rgb_for_normal_text(color_hash[:foreground]))
+        Wasko::Applescript.run do
+          script_with_rgb_for_normal_text(color_hash[:foreground])
+        end
       end
     end
 
@@ -103,26 +110,23 @@ SCRIPT
     end
 
     def current_background_color
-      script = <<SCRIPT
+      Wasko::Applescript.run do
+        <<SCRIPT
 tell application "Terminal"
   get background color of current settings of selected tab of first window
 end tell
 SCRIPT
-      run_applescript(script).gsub("\n", '')
+      end
     end
 
     def current_normal_text_color
-      script = <<SCRIPT
+      Wasko::Applescript.run do
+        <<SCRIPT
 tell application "Terminal"
   get normal text color of current settings of selected tab of first window
 end tell
 SCRIPT
-      run_applescript(script).gsub("\n", '')
-    end
-
-    # Run the applescript from the command line.
-    def run_applescript(script)
-      `/usr/bin/osascript -e "#{script.gsub('"', '\"')}"`
+      end
     end
 
     # # Configuration
