@@ -38,6 +38,14 @@ module Wasko
       advanced_typing_apparatus.set_normal_text_color(Wasko::Color.color_from_string(color).to_applescript)
     end
 
+    def bold_color
+      ::Color::RGB.from_applescript(advanced_typing_apparatus.bold_text_color).html
+    end
+
+    def set_bold_color(color)
+      advanced_typing_apparatus.set_bold_text_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
     def cursor_color
       ::Color::RGB.from_applescript(advanced_typing_apparatus.cursor_color).html
     end
@@ -63,6 +71,7 @@ module Wasko
       [
        "Background: #{background_color}",
        "Foreground: #{foreground_color}",
+       "Bold Text : #{bold_color}",
        "Cursor    : #{cursor_color}",
        "Font      : #{font}"
       ].join("\n")
@@ -73,13 +82,10 @@ module Wasko
       if color = Wasko::Color.color_from_string(color_string)
         palette = ::Color::Palette::MonoContrast.new(color)
 
-        background = palette.background[-3].html
-        foreground = palette.foreground[1].html
-        cursor     = palette.foreground[-3].html
-
-        set_background_color background
-        set_foreground_color foreground
-        set_cursor_color cursor
+        set_background_color palette.background[-3].html
+        set_foreground_color palette.foreground[1].html
+        set_bold_text_color palette.background[-1].html
+        set_cursor_color palette.foreground[-3].html
       end
     end
 

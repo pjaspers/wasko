@@ -15,6 +15,7 @@ module Wasko
     map "-c" => :cursor
     map "-t" => :text
     map "-f" => :font
+    map "-s" => :strong
 
     map "-w" => :save_color
     map "-r" => :load_color
@@ -38,6 +39,15 @@ module Wasko
         say Wasko.foreground_color
       else
         Wasko.set_text_color color_name
+      end
+    end
+
+    desc "strong COLOR", "Gets/sets the bold text color"
+    def strong(color_name="")
+      if color_name.empty?
+        say Wasko.bold_color
+      else
+        Wasko.set_bold_color color_name
       end
     end
 
