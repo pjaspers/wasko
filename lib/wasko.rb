@@ -2,6 +2,7 @@ require "color/palette/monocontrast"
 require "yaml"
 require "wasko/applescript"
 require "wasko/terminal"
+require "wasko/color"
 
 module Wasko
   class << self
