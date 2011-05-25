@@ -1,0 +1,78 @@
+<!DOCTYPE html>  <html> <head>   <title>terminal.rb</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="wasko.html">                 wasko.rb               </a>                                           <a class="source" href="applescript.html">                 applescript.rb               </a>                                           <a class="source" href="color.html">                 color.rb               </a>                                           <a class="source" href="terminal.html">                 terminal.rb               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               terminal.rb             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="k">module</span> <span class="nn">Wasko</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>This class will be used to strip the Applescript
+even further away, encapsulating all the needed
+methods to set colors and fonts of <code>Terminal.app</code>.</p>
+
+<p>Added bonus is, this paves the way to add support
+for <a href="http://code.google.com/p/iterm2/">iTerm2</a> and
+other variants.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">class</span> <span class="nc">Terminal</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <h1>Getters And Setters</h1>
+
+<p>This supports the following</p>
+
+<ul>
+<li><code>set_background_color "fff"</code></li>
+<li><code>background_color</code></li>
+<li><code>set_normal_text_color "fff"</code></li>
+<li><code>normal_text_color</code></li>
+<li><code>set_font_size 12</code></li>
+<li><code>font_size</code></li>
+<li><code>set_font_name "DejaVu Sans Mono"</code></li>
+<li><code>font_name</code></li>
+</ul>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">method_missing</span><span class="p">(</span><span class="n">method_sym</span><span class="p">,</span> <span class="o">*</span><span class="n">arguments</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">method_sym</span><span class="o">.</span><span class="n">to_s</span> <span class="o">=~</span> <span class="sr">/^set_(.*)$/</span>
+        <span class="nb">self</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="vg">$1</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/_/</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="n">arguments</span><span class="o">.</span><span class="n">first</span><span class="p">)</span>
+      <span class="k">elsif</span> <span class="n">method_sym</span><span class="o">.</span><span class="n">to_s</span> <span class="o">=~</span> <span class="sr">/^([a-z]+_[a-z]+(.*))$/</span>
+        <span class="nb">self</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="vg">$1</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/_/</span><span class="p">,</span> <span class="s2">&quot; &quot;</span><span class="p">))</span>
+      <span class="k">else</span>
+        <span class="k">super</span>
+      <span class="k">end</span>
+    <span class="k">end</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>Pretty big todo, shield this off somewhat.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">respond_to?</span><span class="p">(</span><span class="n">method_sym</span><span class="p">,</span> <span class="n">include_private</span> <span class="o">=</span> <span class="kp">false</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">method_sym</span><span class="o">.</span><span class="n">to_s</span> <span class="o">=~</span> <span class="sr">/^set_(.*)$/</span>
+        <span class="kp">true</span>
+      <span class="k">elsif</span> <span class="n">method_sym</span><span class="o">.</span><span class="n">to_s</span> <span class="o">=~</span> <span class="sr">/^[a-z]+_[a-z]+(.*)$/</span>
+        <span class="kp">true</span>
+      <span class="k">else</span>
+        <span class="k">super</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="kp">protected</span>
+
+    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">set</span><span class="p">(</span><span class="n">conditions</span> <span class="o">=</span> <span class="p">{})</span>
+      <span class="no">Wasko</span><span class="o">::</span><span class="no">Applescript</span><span class="o">.</span><span class="n">run</span> <span class="k">do</span>
+        <span class="nb">self</span><span class="o">.</span><span class="n">set_script</span><span class="p">(</span><span class="n">conditions</span><span class="o">.</span><span class="n">keys</span><span class="o">.</span><span class="n">first</span><span class="p">,</span> <span class="n">conditions</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">first</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">get</span><span class="p">(</span><span class="n">object</span><span class="p">)</span>
+      <span class="no">Wasko</span><span class="o">::</span><span class="no">Applescript</span><span class="o">.</span><span class="n">run</span> <span class="k">do</span>
+        <span class="nb">self</span><span class="o">.</span><span class="n">get_script</span><span class="p">(</span><span class="n">object</span><span class="p">)</span>
+      <span class="k">end</span>
+    <span class="k">end</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <h2>Utility methods</h2>
+
+<p>Setter</p>
+
+<pre><code> Wasko::Terminal.set_script("background color", "red")
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">set_script</span><span class="p">(</span><span class="n">object</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+      <span class="k">unless</span> <span class="n">value</span> <span class="o">=~</span> <span class="sr">/^(\{|\[|\()/</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\&quot;</span><span class="si">#{</span><span class="n">value</span><span class="si">}</span><span class="se">\&quot;</span><span class="s2">&quot;</span>
+      <span class="k">end</span>
+      <span class="o">&lt;&lt;</span><span class="no">SCRIPT</span>
+<span class="sh">tell application &quot;Terminal&quot;</span>
+<span class="sh">  set #{object} of selected tab of first window to #{value}</span>
+<span class="sh">end tell</span>
+<span class="no">SCRIPT</span>
+    <span class="k">end</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Getter</p>
+
+<pre><code> Wasko::Terminal.get_script("background color")
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">get_script</span><span class="p">(</span><span class="n">object</span><span class="p">)</span>
+      <span class="o">&lt;&lt;</span><span class="no">SCRIPT</span>
+<span class="sh">tell application &quot;Terminal&quot;</span>
+<span class="sh">  get #{object} of selected tab of first window</span>
+<span class="sh">end tell</span>
+<span class="no">SCRIPT</span>
+    <span class="k">end</span>
+
+  <span class="k">end</span>
+<span class="k">end</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 

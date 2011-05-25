@@ -1,7 +1,10 @@
 require "color/palette/monocontrast"
 require "yaml"
+# [Applescript](applescript.html)
 require "wasko/applescript"
+# [Terminal](terminal.html)
 require "wasko/terminal"
+# [Color](color.html)
 require "wasko/color"
 
 module Wasko

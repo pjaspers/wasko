@@ -1,0 +1,200 @@
+<!DOCTYPE html>  <html> <head>   <title>color.rb</title>   <meta http-equiv="content-type" content="text/html; charset=UTF-8">   <link rel="stylesheet" media="all" href="docco.css" /> </head> <body>   <div id="container">     <div id="background"></div>            <div id="jump_to">         Jump To &hellip;         <div id="jump_wrapper">           <div id="jump_page">                                           <a class="source" href="wasko.html">                 wasko.rb               </a>                                           <a class="source" href="applescript.html">                 applescript.rb               </a>                                           <a class="source" href="color.html">                 color.rb               </a>                                           <a class="source" href="terminal.html">                 terminal.rb               </a>                        </div>         </div>       </div>          <table cellpadding="0" cellspacing="0">       <thead>         <tr>           <th class="docs">             <h1>               color.rb             </h1>           </th>           <th class="code">           </th>         </tr>       </thead>       <tbody>                               <tr id="section-1">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-1">&#182;</a>               </div>                            </td>             <td class="code">               <div class="highlight"><pre><span class="nb">require</span> <span class="s2">&quot;color&quot;</span>
+
+<span class="k">class</span> <span class="nc">Color</span><span class="o">::</span><span class="no">RGB</span>
+
+  <span class="k">class</span> <span class="o">&lt;&lt;</span> <span class="nb">self</span></pre></div>             </td>           </tr>                               <tr id="section-2">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-2">&#182;</a>               </div>               <p>Creates a <code>color</code> from an <code>Applescript</code> string,
+<code>Applescript</code> uses <code>short int</code> to make the RGB,
+<code>65535</code> is the maximum.</p>
+
+<p>Example:</p>
+
+<pre><code> Color::RGB.from_applescript "65535,65535,65535"
+   =&gt; &lt;RGB [#ffffff]&gt;
+</code></pre>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">from_applescript</span><span class="p">(</span><span class="n">applescript_string</span><span class="p">)</span>
+      <span class="n">applescript_string</span><span class="o">.</span><span class="n">gsub!</span><span class="p">(</span><span class="sr">/\{|\}/</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+      <span class="n">rgb</span> <span class="o">=</span> <span class="n">applescript_string</span><span class="o">.</span><span class="n">strip</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)</span>
+      <span class="n">colors</span> <span class="o">=</span> <span class="n">rgb</span><span class="o">.</span><span class="n">map</span> <span class="k">do</span> <span class="o">|</span><span class="n">value</span><span class="o">|</span>
+        <span class="n">value</span><span class="o">.</span><span class="n">to_i</span> <span class="o">/</span> <span class="mi">257</span>
+      <span class="k">end</span>
+      <span class="no">Color</span><span class="o">::</span><span class="no">RGB</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="o">*</span><span class="n">colors</span><span class="p">)</span>
+    <span class="k">end</span>
+  <span class="k">end</span></pre></div>             </td>           </tr>                               <tr id="section-3">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-3">&#182;</a>               </div>               <p>Converts an instance of <code>Color</code> to an <code>Applescript</code>
+string color format.</p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">to_applescript</span>
+    <span class="n">rgb</span> <span class="o">=</span> <span class="o">[</span><span class="nb">self</span><span class="o">.</span><span class="n">red</span><span class="o">.</span><span class="n">to_i</span> <span class="o">*</span> <span class="mi">257</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">green</span><span class="o">.</span><span class="n">to_i</span> <span class="o">*</span> <span class="mi">257</span><span class="p">,</span> <span class="nb">self</span><span class="o">.</span><span class="n">blue</span><span class="o">.</span><span class="n">to_i</span> <span class="o">*</span> <span class="mi">257</span><span class="o">].</span><span class="n">join</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">)</span>
+      <span class="s2">&quot;{</span><span class="si">#{</span><span class="n">rgb</span><span class="si">}</span><span class="s2">}&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="k">module</span> <span class="nn">Wasko</span></pre></div>             </td>           </tr>                               <tr id="section-4">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-4">&#182;</a>               </div>               <p>This class will be used to handle (aptly named, it is)
+all things concerning Color. Internally we'll be mostly
+using the <a href="http://rubydoc.info/gems/color/1.4.1/frames">color gem</a></p>             </td>             <td class="code">               <div class="highlight"><pre>  <span class="k">class</span> <span class="nc">Color</span></pre></div>             </td>           </tr>                               <tr id="section-5">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-5">&#182;</a>               </div>               <p>Tries to get a <code>Color</code> from a string, will return <code>false</code>
+if it fails to do so, if it does recognize a color converts it
+to a format that <code>Applescript</code> will support.</p>
+
+<p>At the moment support all named css-colors (like <code>red</code>, <code>aliceblue</code>, etc.)
+and all hex-colors.</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">color_from_string</span><span class="p">(</span><span class="n">color_string</span><span class="p">)</span>
+      <span class="k">return</span> <span class="o">::</span><span class="no">Color</span><span class="o">::</span><span class="no">RGB</span><span class="o">.</span><span class="n">from_html</span><span class="p">(</span><span class="n">color_string</span><span class="p">)</span>             <span class="k">if</span> <span class="n">hex_color?</span><span class="p">(</span><span class="n">color_string</span><span class="p">)</span>
+      <span class="k">return</span> <span class="o">::</span><span class="no">Color</span><span class="o">::</span><span class="no">RGB</span><span class="o">.</span><span class="n">from_html</span><span class="p">(</span><span class="n">names_hash</span><span class="o">[</span><span class="n">color_string</span><span class="o">]</span><span class="p">)</span> <span class="k">if</span> <span class="n">named_color?</span><span class="p">(</span><span class="n">color_string</span><span class="p">)</span>
+      <span class="kp">false</span>
+    <span class="k">end</span></pre></div>             </td>           </tr>                               <tr id="section-6">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-6">&#182;</a>               </div>               <p>Looks through all the named css colors</p>             </td>             <td class="code">               <div class="highlight"><pre>    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">named_color?</span><span class="p">(</span><span class="n">color_string</span><span class="p">)</span>
+      <span class="n">names_hash</span><span class="o">.</span><span class="n">keys</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="n">color_string</span><span class="p">)</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">hex_color?</span><span class="p">(</span><span class="n">color_string</span><span class="p">)</span></pre></div>             </td>           </tr>                               <tr id="section-7">             <td class="docs">               <div class="pilwrap">                 <a class="pilcrow" href="#section-7">&#182;</a>               </div>               <p>Blatantly stolen from <a href="http://www.geekzilla.co.uk/View05C802F8-F1DF-4097-A969-0EACB51C7834.htm">here</a></p>             </td>             <td class="code">               <div class="highlight"><pre>      <span class="n">color_string</span> <span class="o">=~</span> <span class="sr">/^#?([a-f]|[A-F]|[0-9]){3}(([a-f]|[A-F]|[0-9]){3})?$/</span>
+    <span class="k">end</span>
+
+    <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">names_hash</span>
+      <span class="p">{</span>
+        <span class="s2">&quot;aliceblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f0f8ff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;antiquewhite&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#faebd7&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aqua&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#00ffff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;aquamarine&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#7fffd4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;azure&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f0ffff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;beige&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f5f5dc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;bisque&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffe4c4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;black&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#000000&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;blanchedalmond&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffebcd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;blue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#0000ff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;blueviolet&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#8a2be2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;brown&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#a52a2a&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;burlywood&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#deb887&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cadetblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#5f9ea0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;chartreuse&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#7fff00&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;chocolate&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#d2691e&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;coral&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ff7f50&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cornflowerblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#6495ed&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cornsilk&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fff8dc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;crimson&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#dc143c&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;cyan&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#00ffff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#00008b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkcyan&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#008b8b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkgoldenrod&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#b8860b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkgray&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#a9a9a9&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkgrey&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#a9a9a9&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkgreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#006400&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkkhaki&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#bdb76b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkmagenta&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#8b008b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkolivegreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#556b2f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkorange&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ff8c00&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkorchid&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#9932cc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkred&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#8b0000&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darksalmon&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#e9967a&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkseagreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#8fbc8f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkslateblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#483d8b&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkslategray&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#2f4f4f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkslategrey&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#2f4f4f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkturquoise&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#00ced1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;darkviolet&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#9400d3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;deeppink&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ff1493&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;deepskyblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#00bfff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dimgray&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#696969&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dimgrey&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#696969&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dodgerblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#1e90ff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;firebrick&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#b22222&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;floralwhite&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fffaf0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;forestgreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#228b22&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;fuchsia&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ff00ff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gainsboro&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#dcdcdc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ghostwhite&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f8f8ff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gold&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffd700&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;goldenrod&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#daa520&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;gray&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#808080&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;grey&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#808080&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;green&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#008000&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;greenyellow&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#adff2f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;honeydew&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f0fff0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;hotpink&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ff69b4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;indianred&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#cd5c5c&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;indigo&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#4b0082&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;ivory&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fffff0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;khaki&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f0e68c&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lavender&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#e6e6fa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lavenderblush&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fff0f5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lawngreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#7cfc00&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lemonchiffon&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fffacd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#add8e6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightcoral&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f08080&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightcyan&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#e0ffff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightgoldenrodyellow&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fafad2&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightgray&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#d3d3d3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightgrey&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#d3d3d3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightgreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#90ee90&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightpink&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffb6c1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightsalmon&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffa07a&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightseagreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#20b2aa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightskyblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#87cefa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightslategray&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#778899&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightslategrey&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#778899&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightsteelblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#b0c4de&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lightyellow&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffffe0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lime&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#00ff00&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;limegreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#32cd32&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;linen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#faf0e6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;magenta&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ff00ff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;maroon&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#800000&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mediumaquamarine&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#66cdaa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mediumblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#0000cd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mediumorchid&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ba55d3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mediumpurple&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#9370d8&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mediumseagreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#3cb371&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mediumslateblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#7b68ee&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mediumspringgreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#00fa9a&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mediumturquoise&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#48d1cc&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mediumvioletred&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#c71585&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;midnightblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#191970&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mintcream&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f5fffa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;mistyrose&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffe4e1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;moccasin&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffe4b5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;navajowhite&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffdead&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;navy&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#000080&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;oldlace&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fdf5e6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;olive&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#808000&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;olivedrab&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#6b8e23&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;orange&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffa500&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;orangered&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ff4500&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;orchid&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#da70d6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;palegoldenrod&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#eee8aa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;palegreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#98fb98&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;paleturquoise&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#afeeee&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;palevioletred&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#d87093&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;papayawhip&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffefd5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;peachpuff&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffdab9&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;peru&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#cd853f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pink&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffc0cb&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;plum&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#dda0dd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;powderblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#b0e0e6&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;purple&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#800080&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;red&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ff0000&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;rosybrown&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#bc8f8f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;royalblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#4169e1&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;saddlebrown&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#8b4513&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;salmon&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fa8072&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sandybrown&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f4a460&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;seagreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#2e8b57&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;seashell&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fff5ee&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;sienna&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#a0522d&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;silver&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#c0c0c0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;skyblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#87ceeb&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;slateblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#6a5acd&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;slategray&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#708090&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;slategrey&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#708090&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;snow&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#fffafa&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;springgreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#00ff7f&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;steelblue&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#4682b4&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tan&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#d2b48c&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;teal&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#008080&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;thistle&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#d8bfd8&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tomato&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ff6347&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;turquoise&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#40e0d0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;violet&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ee82ee&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;wheat&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f5deb3&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;white&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffffff&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;whitesmoke&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#f5f5f5&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;yellow&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#ffff00&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;yellowgreen&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;#9acd32&quot;</span>
+      <span class="p">}</span>
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+
+</pre></div>             </td>           </tr>                </tbody>     </table>   </div> </body> </html> 
