@@ -1,5 +1,27 @@
 require "color"
 
+class Color::RGB
+  class << self
+    # Creates a `color` from an `Applescript` string,
+    # `Applescript` uses `short int` to make the RGB,
+    # `65535` is the maximum.
+    #
+    # Example:
+    #
+    #      Color::RGB.from_applescript "65535,65535,65535"
+    #        => <RGB [#ffffff]>
+    #
+    def from_applescript(applescript_string)
+      applescript_string.gsub!(/\{|\}/, "")
+      rgb = applescript_string.strip.split(",")
+      colors = rgb.map do |value|
+        value.to_i / 257
+      end
+      Color::RGB.new(*colors)
+    end
+  end
+end
+
 module Wasko
   # This class will be used to handle (aptly named, it is)
   # all things concerning Color. Internally we'll be mostly
