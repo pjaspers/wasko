@@ -1,8 +1,55 @@
 require "color/palette/monocontrast"
 require "yaml"
 require "wasko/applescript"
+require "wasko/terminal"
+
 module Wasko
   class << self
+
+    # Currently this only returns Apple's `Terminal.app`,
+    # in the future this could be used to support other
+    # Terminals as well.
+    def advanced_typing_apparatus
+      Wasko::Terminal
+    end
+
+    # ## Set/Get fonts and colors
+    #
+    # These all call the `advanced_typing_apparatus` and
+    # do exactly what they say on the tin.
+    #
+    def background_color
+      advanced_typing_apparatus.background_color
+    end
+
+    def set_background_color(color)
+      advanced_typing_apparatus.set_background_color(color)
+    end
+
+    def foreground_color
+      advanced_typing_apparatus.normal_text_color
+    end
+
+    def set_foreground_color(color)
+      advanced_typing_apparatus.set_normal_text_color(color)
+    end
+
+    def cursor_color
+      advanced_typing_apparatus.cursor_color
+    end
+
+    def set_cursor_color(color)
+      advanced_typing_apparatus.set_cursor_color color
+    end
+
+    def font
+      "#{advanced_typing_apparatus.font_name}, #{advanced_typing_apparatus.font_size}"
+    end
+
+    def set_font(font_name, font_size = 14)
+      advanced_typing_apparatus.set_font_name font_name
+      advanced_typing_apparatus.set_font_size font_size
+    end
 
     # ## Palette
     #
@@ -17,7 +64,6 @@ module Wasko
       draw_rgb_color palette_colors
     end
 
-
     # ## Named Colors
     #
     # Applescript has a notion of named colors, these can be
@@ -25,22 +71,6 @@ module Wasko
     # your own schemes.
     def colors
       %w(blue yellow white red orange green black brown cyan purple magenta)
-    end
-
-    def draw_named_color(color_name)
-      Wasko::Applescript.run do
-        script_with_color(color_name)
-      end
-    end
-
-    # Set background color to one of the named colors
-    # available in `AppleScript`.
-    def script_with_color(color)
-      <<SCRIPT
-tell application "Terminal"
-  set background color of current settings of selected tab of first window to "#{color}"
-end tell
-SCRIPT
     end
 
     # ## RGB Colors
@@ -81,51 +111,11 @@ SCRIPT
     #     Wasko.draw_rgb_color(:foreground => {65535, 65535,65535, 655535})
     def draw_rgb_color(color_hash)
       if color_hash[:background]
-        Wasko::Applescript.run do
-          script_with_rgb_for_background(color_hash[:background])
-        end
+        set_background_color color_hash[:background]
       end
 
       if color_hash[:foreground]
-        Wasko::Applescript.run do
-          script_with_rgb_for_normal_text(color_hash[:foreground])
-        end
-      end
-    end
-
-    def script_with_rgb_for_normal_text(rgb_values)
-      <<SCRIPT
-tell application "Terminal"
-  set normal text color of current settings of selected tab of first window to #{rgb_values}
-end tell
-SCRIPT
-    end
-
-    def script_with_rgb_for_background(rgb_values)
-      <<SCRIPT
-tell application "Terminal"
-  set background color of current settings of selected tab of first window to #{rgb_values}
-end tell
-SCRIPT
-    end
-
-    def current_background_color
-      Wasko::Applescript.run do
-        <<SCRIPT
-tell application "Terminal"
-  get background color of current settings of selected tab of first window
-end tell
-SCRIPT
-      end
-    end
-
-    def current_normal_text_color
-      Wasko::Applescript.run do
-        <<SCRIPT
-tell application "Terminal"
-  get normal text color of current settings of selected tab of first window
-end tell
-SCRIPT
+        set_foreground_color color_hash[:foreground]
       end
     end
 

@@ -9,10 +9,13 @@ module Wasko
   class CLI < Thor
     include Thor::Actions
 
-    map "-l" => :list
-    map "-C" => :color
-    map "-D" => :css
     map "-p" => :palette
+    map "-l" => :list
+    map "-b" => :background_color
+    map "-c" => :cursor_color
+    map "-t" => :text_color
+    map "-f" => :font
+
     map "-w" => :save_color
     map "-r" => :load_color
 
@@ -21,20 +24,41 @@ module Wasko
       Wasko.palette_from_color hex_color
     end
 
-    desc "color", "Sets background color to one of the named colors"
-    def color(color_name="red")
-      if Wasko.colors.include?(color_name)
-        Wasko.draw_named_color(color_name)
+    desc "text_color", "Sets text color"
+    def text_color(color_name="")
+      if color_name.empty?
+        say Wasko.foreground_color
       else
-        say "Please pick a color from: [#{Wasko.colors.join(", ")}]"
+        Wasko.text_color color_name
       end
     end
 
-    desc "css", "Sets background color to the css color"
-    def css(hex_color="cc0000")
-      Wasko.draw_css_color hex_color
+    desc "background_color", "Sets background color"
+    def background_color(color_name="")
+      if color_name.empty?
+        say Wasko.background_color
+      else
+        Wasko.background_color color_name
+      end
     end
 
+    desc "cursor_color", "Sets cursor color"
+    def cursor_color(color_name="")
+      if color_name.empty?
+        say Wasko.cursor_color
+      else
+        Wasko.cursor_color color_name
+      end
+    end
+
+    desc "font", "Sets font"
+    def font(font_name = "", font_size = 14)
+      if font_name.empty?
+        say Wasko.font
+      else
+        Wasko.set_font font_name, font_size
+      end
+    end
 
     desc "load NAME", "Loads a stored theme"
     def load_color(name)
