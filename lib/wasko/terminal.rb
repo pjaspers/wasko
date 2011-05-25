@@ -64,9 +64,12 @@ module Wasko
     #      Wasko::Terminal.set_script("background color", "red")
     #
     def self.set_script(object, value)
+      unless value =~ /^(\{|\[|\()/
+        value = "\"#{value}\""
+      end
       <<SCRIPT
 tell application "Terminal"
-  set #{object} of selected tab of first window to "#{value}"
+  set #{object} of selected tab of first window to #{value}
 end tell
 SCRIPT
     end

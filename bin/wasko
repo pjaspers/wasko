@@ -11,47 +11,55 @@ module Wasko
 
     map "-p" => :palette
     map "-l" => :list
-    map "-b" => :background_color
-    map "-c" => :cursor_color
-    map "-t" => :text_color
+    map "-b" => :background
+    map "-c" => :cursor
+    map "-t" => :text
     map "-f" => :font
 
     map "-w" => :save_color
     map "-r" => :load_color
 
-    desc "palette", "Sets both back and foreground color adjusted to supplied hex_color"
-    def palette(hex_color)
-      Wasko.palette_from_color hex_color
+    desc "palette COLOR", "Gets/sets both back and foreground color adjusted to supplied"
+    def palette(color = "")
+      if color.empty?
+        say Wasko.palette
+      else
+        if Wasko::Color.color_from_string(color)
+          Wasko.set_palette color
+        else
+          say "Sorry, please use a valid CSS color."
+        end
+      end
     end
 
-    desc "text_color", "Sets text color"
-    def text_color(color_name="")
+    desc "text COLOR", "Gets/sets text color"
+    def text(color_name="")
       if color_name.empty?
         say Wasko.foreground_color
       else
-        Wasko.text_color color_name
+        Wasko.set_text_color color_name
       end
     end
 
-    desc "background_color", "Sets background color"
-    def background_color(color_name="")
+    desc "background COLOR", "Gets/sets background color"
+    def background(color_name="")
       if color_name.empty?
         say Wasko.background_color
       else
-        Wasko.background_color color_name
+        Wasko.set_background_color color_name
       end
     end
 
-    desc "cursor_color", "Sets cursor color"
-    def cursor_color(color_name="")
+    desc "cursor COLOR", "Gets/sets cursor color"
+    def cursor(color_name="")
       if color_name.empty?
         say Wasko.cursor_color
       else
-        Wasko.cursor_color color_name
+        Wasko.set_cursor_color color_name
       end
     end
 
-    desc "font", "Sets font"
+    desc "font NAME SIZE", "Gets/sets font"
     def font(font_name = "", font_size = 14)
       if font_name.empty?
         say Wasko.font
