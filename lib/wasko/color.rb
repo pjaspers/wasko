@@ -1,6 +1,7 @@
 require "color"
 
 class Color::RGB
+
   class << self
     # Creates a `color` from an `Applescript` string,
     # `Applescript` uses `short int` to make the RGB,
@@ -19,6 +20,13 @@ class Color::RGB
       end
       Color::RGB.new(*colors)
     end
+  end
+
+  # Converts an instance of `Color` to an `Applescript`
+  # string color format.
+  def to_applescript
+    rgb = [self.red.to_i * 257, self.green.to_i * 257, self.blue.to_i * 257].join(", ")
+      "{#{rgb}}"
   end
 end
 
