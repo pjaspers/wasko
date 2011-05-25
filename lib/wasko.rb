@@ -43,7 +43,7 @@ module Wasko
     end
 
     def set_bold_color(color)
-      advanced_typing_apparatus.set_bold_color(Wasko::Color.color_from_string(color).to_applescript)
+      advanced_typing_apparatus.set_bold_text_color(Wasko::Color.color_from_string(color).to_applescript)
     end
 
     def cursor_color
@@ -84,7 +84,7 @@ module Wasko
 
         set_background_color palette.background[-3].html
         set_foreground_color palette.foreground[1].html
-        set_bold_text_color palette.background[-1].html
+        set_bold_color palette.background[-1].html
         set_cursor_color palette.foreground[-3].html
       end
     end
