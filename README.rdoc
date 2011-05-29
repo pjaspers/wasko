@@ -2,6 +2,10 @@
 
 The quickest way to set your Terminal palette.
 
+== TODO
+
+* Terminal.app doesn't support selection color. Maybe go around it with some GUI applescripting. *rhymes with clucking bell*
+
 == Contributing to wasko
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
