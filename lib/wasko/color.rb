@@ -26,7 +26,7 @@ class Color::RGB
   # string color format.
   def to_applescript
     rgb = [self.red.to_i * 257, self.green.to_i * 257, self.blue.to_i * 257].join(", ")
-      "{#{rgb}}"
+    "{#{rgb}}"
   end
 end
 

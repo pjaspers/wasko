@@ -6,7 +6,8 @@ require "wasko/applescript"
 require "wasko/terminal"
 # [Color](color.html)
 require "wasko/color"
-
+# [Palette](palette.html)
+require "wasko/palette"
 module Wasko
   class << self
 
@@ -79,14 +80,12 @@ module Wasko
 
     # Try to set a sensible palette from a base color
     def set_palette(color_string)
-      if color = Wasko::Color.color_from_string(color_string)
-        palette = ::Color::Palette::MonoContrast.new(color)
+      p = Wasko::Palette.new(color_string)
 
-        set_background_color palette.background[-3].html
-        set_foreground_color palette.foreground[1].html
-        set_bold_color palette.background[-1].html
-        set_cursor_color palette.foreground[-3].html
-      end
+      set_background_color p.colors[:base].html
+      set_foreground_color p.colors[:foreground].html
+      set_bold_color p.colors[:bold].html
+      set_cursor_color p.colors[:cursor].html
     end
 
     # # Configuration
