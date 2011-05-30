@@ -21,8 +21,10 @@ Jeweler::Tasks.new do |gem|
   gem.authors = ["pjaspers"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
-   gem.add_runtime_dependency 'color'
-   gem.add_development_dependency 'thor'
+  gem.add_runtime_dependency 'color'
+  gem.add_runtime_dependency 'thor'
+  gem.add_development_dependency 'should'
+  gem.add_development_dependency 'mocha'
 end
 Jeweler::RubygemsDotOrgTasks.new
 
