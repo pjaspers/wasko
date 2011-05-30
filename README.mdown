@@ -23,6 +23,7 @@ The main ones are:
 * Terminal.app doesn't support selection color. Maybe go around it with some GUI applescripting. *rhymes with clucking bell*
 * ANSI Colors, figure out how to get hex to ansi
 * LSCOLORS, figure out how to set them for all terminals
+* Add default Apple themes to default install
 
 ## Contributing to wasko
 
