@@ -1,3 +1,5 @@
+require "fileutils"
+
 module Wasko
   # This class will handle all things considering
   # loading and saving configuration. It should work
@@ -15,7 +17,7 @@ module Wasko
       def wasko_directory
         wasko_path = File.join(ENV['HOME'], ".wasko")
         unless File.exists?(wasko_path) && File.directory?(wasko_path)
-          Dir.chdir(ENV['HOME']) { Dir.mkdir(".wasko")}
+          FileUtils.mkdir_p File.join(ENV['HOME'], ".wasko")
         end
         wasko_path
       end
