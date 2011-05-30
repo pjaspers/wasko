@@ -2,6 +2,7 @@ source "http://rubygems.org"
 
 gem "thor"
 gem "color"
+gem "rake","0.8.7"
 
 group :development do
   gem "shoulda", ">= 0"
