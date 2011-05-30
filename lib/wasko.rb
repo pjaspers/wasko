@@ -10,6 +10,7 @@ require "wasko/color"
 require "wasko/palette"
 # [Configuration: Loading and saving themes](configuration.html)
 require "wasko/configuration"
+
 module Wasko
   class << self
 
@@ -62,7 +63,7 @@ module Wasko
     end
 
     def set_font_name(name)
-      advanced_typing_apparatus.set_font_name font_name
+      advanced_typing_apparatus.set_font_name name
     end
 
     def font_size
@@ -79,7 +80,7 @@ module Wasko
 
     def set_font(font_size = 14, name = nil)
       name = font_name if name.empty?
-      set_font_size size
+      set_font_size font_size
       set_font_name name
     end
 
