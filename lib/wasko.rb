@@ -1,13 +1,15 @@
 require "color/palette/monocontrast"
 require "yaml"
-# [Applescript](applescript.html)
+# [Applescript: Small wrapper for running applescript](applescript.html)
 require "wasko/applescript"
-# [Terminal](terminal.html)
+# [Terminal: Support for Terminal.app](terminal.html)
 require "wasko/terminal"
-# [Color](color.html)
+# [Color: Small color utilities](color.html)
 require "wasko/color"
-# [Palette](palette.html)
+# [Palette: Generates a color scheme](palette.html)
 require "wasko/palette"
+# [Configuration: Loading and saving themes](configuration.html)
+require "wasko/configuration"
 module Wasko
   class << self
 
@@ -55,14 +57,30 @@ module Wasko
       advanced_typing_apparatus.set_cursor_color(Wasko::Color.color_from_string(color).to_applescript)
     end
 
+    def font_name
+      advanced_typing_apparatus.font_name
+    end
+
+    def set_font_name(name)
+      advanced_typing_apparatus.set_font_name font_name
+    end
+
+    def font_size
+      advanced_typing_apparatus.font_size
+    end
+
+    def set_font_size(size)
+       advanced_typing_apparatus.set_font_size size
+    end
+
     def font
       "#{advanced_typing_apparatus.font_name}, #{advanced_typing_apparatus.font_size}"
     end
 
-    def set_font(font_name, font_size = 14)
-      puts font_name
-      advanced_typing_apparatus.set_font_name font_name
-      advanced_typing_apparatus.set_font_size font_size
+    def set_font(font_size = 14, name = nil)
+      name = font_name if name.empty?
+      set_font_size size
+      set_font_name name
     end
 
     # ## Palette
@@ -80,7 +98,7 @@ module Wasko
 
     # Try to set a sensible palette from a base color
     def set_palette(color_string)
-      p = Wasko::Palette.new(color_string)
+      p = Wasko::Palette::TheOriginal.new(color_string)
 
       set_background_color p.colors[:base].html
       set_foreground_color p.colors[:foreground].html
@@ -88,42 +106,5 @@ module Wasko
       set_cursor_color p.colors[:cursor].html
     end
 
-    # # Configuration
-
-    def config_file_exists?
-
-    end
-
-    def config
-      {} unless File.exists?(config_file)
-      if Hash === YAML::load(File.open(config_file))
-        YAML::load(File.open(config_file))[:wasko]
-      else
-        {}
-      end
-    end
-
-    def config_file
-      File.join(ENV['HOME'],'.wasko')
-    end
-
-    def saved_colors
-      "" unless config && config[:colors]
-      config[:colors].keys
-    end
-
-    # ## Loading and saving colors
-    def load_color_from_config(name)
-      return unless config && config[:colors] && config[:colors][name]
-      draw_rgb_color config[:colors][name]
-    end
-
-    def save_color_to_config(rgb_values, name)
-      colors = config[:colors] rescue {}
-      colors[name] = rgb_values
-      File.open(config_file, 'w') do |out|
-        out.write({:wasko => {:colors => colors}}.to_yaml)
-      end
-    end
   end
 end
