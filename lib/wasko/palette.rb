@@ -16,6 +16,7 @@ module Wasko
       def initialize(color_string, contrast = 0)
         @colors = {}
         @base = Wasko::Color.color_from_string(color_string)
+        @base = white unless @base
         @contrast = 30 + contrast
         colors!
       end
