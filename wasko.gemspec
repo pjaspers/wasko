@@ -9,27 +9,45 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pjaspers"]
-  s.date = %q{2011-05-24}
+  s.date = %q{2011-05-31}
   s.default_executable = %q{wasko}
   s.description = %q{Quick tool to set a color palette to your Terminal}
   s.email = %q{piet@10to1.be}
   s.executables = ["wasko"]
   s.extra_rdoc_files = [
     "LICENSE.txt",
-    "README.rdoc"
+    "README.mdown"
   ]
   s.files = [
     ".document",
     "Gemfile",
     "Gemfile.lock",
     "LICENSE.txt",
-    "README.rdoc",
+    "README.mdown",
     "Rakefile",
     "VERSION",
     "bin/wasko",
+    "docs/applescript.html",
+    "docs/color.html",
+    "docs/configuration.html",
+    "docs/docco.css",
+    "docs/palette.html",
+    "docs/terminal.html",
+    "docs/wasko.html",
     "lib/wasko.rb",
+    "lib/wasko/applescript.rb",
+    "lib/wasko/color.rb",
+    "lib/wasko/configuration.rb",
+    "lib/wasko/palette.rb",
+    "lib/wasko/terminal.rb",
+    "sample_generator.rb",
     "test/helper.rb",
-    "test/test_wasko.rb"
+    "test/test_applescript.rb",
+    "test/test_color.rb",
+    "test/test_palette.rb",
+    "test/test_terminal.rb",
+    "test/test_wasko.rb",
+    "wasko.gemspec"
   ]
   s.homepage = %q{http://github.com/pjaspers/wasko}
   s.licenses = ["MIT"]
@@ -38,6 +56,10 @@ Gem::Specification.new do |s|
   s.summary = %q{Set your (OS X) terminal background from the command line}
   s.test_files = [
     "test/helper.rb",
+    "test/test_applescript.rb",
+    "test/test_color.rb",
+    "test/test_palette.rb",
+    "test/test_terminal.rb",
     "test/test_wasko.rb"
   ]
 
@@ -47,31 +69,43 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<thor>, [">= 0"])
       s.add_runtime_dependency(%q<color>, [">= 0"])
+      s.add_runtime_dependency(%q<rake>, ["= 0.8.7"])
       s.add_development_dependency(%q<shoulda>, [">= 0"])
+      s.add_development_dependency(%q<mocha>, [">= 0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
       s.add_runtime_dependency(%q<color>, [">= 0"])
-      s.add_development_dependency(%q<thor>, [">= 0"])
+      s.add_runtime_dependency(%q<thor>, [">= 0"])
+      s.add_development_dependency(%q<should>, [">= 0"])
+      s.add_development_dependency(%q<mocha>, [">= 0"])
     else
       s.add_dependency(%q<thor>, [">= 0"])
       s.add_dependency(%q<color>, [">= 0"])
+      s.add_dependency(%q<rake>, ["= 0.8.7"])
       s.add_dependency(%q<shoulda>, [">= 0"])
+      s.add_dependency(%q<mocha>, [">= 0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
       s.add_dependency(%q<rcov>, [">= 0"])
       s.add_dependency(%q<color>, [">= 0"])
       s.add_dependency(%q<thor>, [">= 0"])
+      s.add_dependency(%q<should>, [">= 0"])
+      s.add_dependency(%q<mocha>, [">= 0"])
     end
   else
     s.add_dependency(%q<thor>, [">= 0"])
     s.add_dependency(%q<color>, [">= 0"])
+    s.add_dependency(%q<rake>, ["= 0.8.7"])
     s.add_dependency(%q<shoulda>, [">= 0"])
+    s.add_dependency(%q<mocha>, [">= 0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.2"])
     s.add_dependency(%q<rcov>, [">= 0"])
     s.add_dependency(%q<color>, [">= 0"])
     s.add_dependency(%q<thor>, [">= 0"])
+    s.add_dependency(%q<should>, [">= 0"])
+    s.add_dependency(%q<mocha>, [">= 0"])
   end
 end
 
