@@ -4,6 +4,8 @@ require "yaml"
 require "wasko/applescript"
 # [Terminal: Support for Terminal.app](terminal.html)
 require "wasko/terminal"
+# [iTerm: Support for iTerm.app](iterm.html)
+require "wasko/iterm"
 # [Color: Small color utilities](color.html)
 require "wasko/color"
 # [Palette: Generates a color scheme](palette.html)
@@ -18,7 +20,16 @@ module Wasko
     # in the future this could be used to support other
     # Terminals as well.
     def advanced_typing_apparatus
-      Wasko::Terminal
+      return Wasko::Terminal if current_application =~ /Terminal.app/
+      return Wasko::Iterm if current_application =~ /iTerm.app/
+      nil
+    end
+
+    # Gets the current active application
+    def current_application
+      Wasko::Applescript.run do
+        "get name of (info for (path to frontmost application))"
+      end
     end
 
     # ## Set/Get fonts and colors
@@ -84,6 +95,40 @@ module Wasko
       set_font_name name
     end
 
+    # ### Ansi Colors
+
+    def set_ansi_black_color(color)
+      advanced_typing_apparatus.set_ansi_black_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
+    def set_ansi_red_color(color)
+      advanced_typing_apparatus.set_ansi_red_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
+    def set_ansi_green_color(color)
+      advanced_typing_apparatus.set_ansi_green_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
+    def set_ansi_yellow_color(color)
+      advanced_typing_apparatus.set_ansi_yellow_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
+    def set_ansi_blue_color(color)
+      advanced_typing_apparatus.set_ansi_blue_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
+    def set_ansi_magenta_color(color)
+      advanced_typing_apparatus.set_ansi_magenta_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
+    def set_ansi_cyan_color(color)
+      advanced_typing_apparatus.set_ansi_cyan_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
+    def set_ansi_white_color(color)
+      advanced_typing_apparatus.set_ansi_white_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
     # ## Palette
     #
     # Returns a string representation of the current settings
@@ -105,6 +150,10 @@ module Wasko
       set_foreground_color p.colors[:foreground].html
       set_bold_color p.colors[:bold].html
       set_cursor_color p.colors[:cursor].html
+
+      %w(black red green yellow blue magenta cyan white).each do |color|
+        eval "set_ansi_#{color}_color p.colors[:#{color}].html"
+      end
     end
 
   end
