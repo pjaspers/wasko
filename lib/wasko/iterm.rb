@@ -2,20 +2,15 @@ module Wasko
   # Adds support for [iTerm2](http://code.google.com/p/iterm2/)
   class Iterm
 
+    # Terminal.app uses a slightly different terminology
+    def self.set_normal_text_color(color)
+      set_foreground_color color
+    end
 
-    # # Getters And Setters
-    #
-    # This supports the following
-    #
-    #  * `set_background_color "fff"`
-    #  * `background_color`
-    #  * `set_normal_text_color "fff"`
-    #  * `normal_text_color`
-    #  * `set_font_size 12`
-    #  * `font_size`
-    #  * `set_font_name "DejaVu Sans Mono"`
-    #  * `font_name`
-    #
+    def self.set_bold_text_color(color)
+      set_bold_color color
+    end
+
     def self.method_missing(method_sym, *arguments, &block)
       if method_sym.to_s =~ /^set_(.*)$/
         self.set($1.gsub(/_/, " ") => arguments.first)
