@@ -8,13 +8,22 @@ module Wasko
   # other variants.
   class Terminal
 
-    def self.set_selected_text_color(color)
-      # Not supported
-    end
-
-    def self.set_selection_color(color)
-      # Not supported
-    end
+    # Unsupported calls
+    # Since Apple hasn't implemented them, no way to set
+    # them, except to fall back to brittle GUI scripting
+    # and I'm not really looking forward to doing that.
+    #
+    # So that's why you should use iTerm2.
+    def self.set_selected_text_color(color);end
+    def self.set_selection_color(color);end
+    def self.set_ansi_black_color(color);end
+    def self.set_ansi_red_color(color);end
+    def self.set_ansi_green_color(color);end
+    def self.set_ansi_yellow_color(color);end
+    def self.set_ansi_blue_color(color);end
+    def self.set_ansi_magenta_color(color);end
+    def self.set_ansi_cyan_color(color);end
+    def self.set_ansi_white_color(color);end
 
     # # Getters And Setters
     #
