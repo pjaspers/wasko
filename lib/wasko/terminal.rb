@@ -8,6 +8,13 @@ module Wasko
   # other variants.
   class Terminal
 
+    def self.set_selected_text_color(color)
+      # Not supported
+    end
+
+    def self.set_selection_color(color)
+      # Not supported
+    end
 
     # # Getters And Setters
     #

@@ -47,6 +47,10 @@ module Wasko
         @base.brightness > 0.5 ? -1 : 1
       end
 
+      def dark_base_color?
+        @base.brightness < 0.5
+      end
+
       # Hash of the color palette
       # TODO: attr_accessible
       def colors
@@ -85,6 +89,7 @@ module Wasko
       def mix_base_with(color_name, mix_value = 50, brightness = 30)
         @base.mix_with(Wasko::Color.color_from_string(color_name), mix_value).adjust_brightness(brightness)
       end
+
     end
   end
 end

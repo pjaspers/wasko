@@ -69,6 +69,14 @@ module Wasko
       advanced_typing_apparatus.set_cursor_color(Wasko::Color.color_from_string(color).to_applescript)
     end
 
+    def set_selected_text_color(color)
+      advanced_typing_apparatus.set_selected_text_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
+    def set_selection_color(color)
+      advanced_typing_apparatus.set_selection_color(Wasko::Color.color_from_string(color).to_applescript)
+    end
+
     def font_name
       advanced_typing_apparatus.font_name
     end
@@ -150,6 +158,8 @@ module Wasko
       set_foreground_color p.colors[:foreground].html
       set_bold_color p.colors[:bold].html
       set_cursor_color p.colors[:cursor].html
+      set_selected_text_color p.colors[:selected].html
+      set_selection_color p.colors[:selection].html
 
       %w(black red green yellow blue magenta cyan white).each do |color|
         eval "set_ansi_#{color}_color p.colors[:#{color}].html"
