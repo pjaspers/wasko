@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{wasko}
-  s.version = "0.0.1"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["pjaspers"]
-  s.date = %q{2011-05-31}
+  s.date = %q{2011-06-15}
   s.default_executable = %q{wasko}
   s.description = %q{Quick tool to set a color palette to your Terminal}
   s.email = %q{piet@10to1.be}
@@ -38,6 +38,7 @@ Gem::Specification.new do |s|
     "lib/wasko/applescript.rb",
     "lib/wasko/color.rb",
     "lib/wasko/configuration.rb",
+    "lib/wasko/iterm.rb",
     "lib/wasko/palette.rb",
     "lib/wasko/terminal.rb",
     "sample_generator.rb",
