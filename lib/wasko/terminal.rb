@@ -10,21 +10,94 @@ module Wasko
 
     # Unsupported calls
     # Since Apple hasn't implemented them, no way to set
-    # them, except to fall back to brittle GUI scripting
-    # and I'm not really looking forward to doing that.
+    # them, except to fall back to some GUI scripting
     #
-    # So that's why you should use iTerm2.
-    def self.set_selected_text_color(color);end
-    def self.set_selection_color(color);end
-    def self.set_ansi_black_color(color);end
-    def self.set_ansi_red_color(color);end
-    def self.set_ansi_green_color(color);end
-    def self.set_ansi_yellow_color(color);end
-    def self.set_ansi_blue_color(color);end
-    def self.set_ansi_magenta_color(color);end
-    def self.set_ansi_cyan_color(color);end
-    def self.set_ansi_white_color(color);end
+    # If you don't like that option I've sent a pull request
+    # to iTerm2 which has ansi applescript support
+    def self.set_selected_text_color(color)
+      # Still no dice.
+    end
 
+    def self.set_selection_color(color)
+
+    end
+
+    # The color wells of the prefs have these indices
+    # (bright colors is +1)
+    #      black   : 4
+    #      red     : 6
+    #      green   : 8
+    #      yellow  : 10
+    #      blue    : 12
+    #      magenta : 14
+    #      cyan    : 16
+    #      white   : 18
+    def self.set_ansi_black_color(color);set_color_via_gui(5, color);end
+    def self.set_ansi_red_color(color);set_color_via_gui(7, color);end
+    def self.set_ansi_green_color(color);set_color_via_gui(9, color);end
+    def self.set_ansi_yellow_color(color);set_color_via_gui(11, color);end
+    def self.set_ansi_blue_color(color);set_color_via_gui(13, color);end
+    def self.set_ansi_magenta_color(color);set_color_via_gui(15, color);end
+    def self.set_ansi_cyan_color(color);set_color_via_gui(17, color);end
+    def self.set_ansi_white_color(color);set_color_via_gui(19, color);end
+
+    def self.set_color_via_gui(color_index, color)
+      Wasko::Applescript.run do
+        <<SCRIPT
+tell application "Terminal"
+  activate
+  tell application "System Events"
+    # Open Preferences
+    keystroke "," using command down
+    tell process "Terminal"
+      click button 2 of tool bar 1 of window 1
+      # Make sure the default is selected
+      set srows to every row of table 1 of scroll area 1 of group 1 of window 1
+      repeat with a_row in srows
+        if value of text field 1 of a_row contains "#{get_selected_theme}" then
+          set selected of a_row to true
+          exit repeat
+        end if
+      end repeat
+
+      click color well #{color_index} of tab group 1 of group 1 of window "Settings"
+      click (every button whose description is "Hex Color Picker") of tool bar 1 of window "Colors"
+      set value of text field 1 of group 1 of window "Colors" to "#{color.html}"
+      # Close Colors
+      click button 1 of window "Colors"
+      # Close prefs
+      keystroke "w" using command down
+    end tell
+  end tell
+end tell
+SCRIPT
+      end
+    end
+
+    def self.get_selected_theme
+      @selected_theme ||=
+        Wasko::Applescript.run do
+        <<SCRIPT
+tell application "Terminal"
+  activate
+  tell application "System Events"
+    # Open Inspector
+    tell process "Terminal"
+      if window "Inspector" exists then
+      else
+        keystroke "I" using command down
+      end if
+      click radio button 2 of tab group 1 of window "Inspector"
+      set selected_theme to value of text field of item 1 of (every row whose selected is true) of table 1 of scroll area 1 of tab group 1 of window "Inspector"
+      click button 1 of window "Inspector"
+      return selected_theme
+    end tell
+
+  end tell
+end tell
+SCRIPT
+      end
+    end
     # # Getters And Setters
     #
     # This supports the following

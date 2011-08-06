@@ -106,35 +106,35 @@ module Wasko
     # ### Ansi Colors
 
     def set_ansi_black_color(color)
-      advanced_typing_apparatus.set_ansi_black_color(Wasko::Color.color_from_string(color).to_applescript)
+      advanced_typing_apparatus.set_ansi_black_color(Wasko::Color.color_from_string(color))
     end
 
     def set_ansi_red_color(color)
-      advanced_typing_apparatus.set_ansi_red_color(Wasko::Color.color_from_string(color).to_applescript)
+      advanced_typing_apparatus.set_ansi_red_color(Wasko::Color.color_from_string(color))
     end
 
     def set_ansi_green_color(color)
-      advanced_typing_apparatus.set_ansi_green_color(Wasko::Color.color_from_string(color).to_applescript)
+      advanced_typing_apparatus.set_ansi_green_color(Wasko::Color.color_from_string(color))
     end
 
     def set_ansi_yellow_color(color)
-      advanced_typing_apparatus.set_ansi_yellow_color(Wasko::Color.color_from_string(color).to_applescript)
+      advanced_typing_apparatus.set_ansi_yellow_color(Wasko::Color.color_from_string(color))
     end
 
     def set_ansi_blue_color(color)
-      advanced_typing_apparatus.set_ansi_blue_color(Wasko::Color.color_from_string(color).to_applescript)
+      advanced_typing_apparatus.set_ansi_blue_color(Wasko::Color.color_from_string(color))
     end
 
     def set_ansi_magenta_color(color)
-      advanced_typing_apparatus.set_ansi_magenta_color(Wasko::Color.color_from_string(color).to_applescript)
+      advanced_typing_apparatus.set_ansi_magenta_color(Wasko::Color.color_from_string(color))
     end
 
     def set_ansi_cyan_color(color)
-      advanced_typing_apparatus.set_ansi_cyan_color(Wasko::Color.color_from_string(color).to_applescript)
+      advanced_typing_apparatus.set_ansi_cyan_color(Wasko::Color.color_from_string(color))
     end
 
     def set_ansi_white_color(color)
-      advanced_typing_apparatus.set_ansi_white_color(Wasko::Color.color_from_string(color).to_applescript)
+      advanced_typing_apparatus.set_ansi_white_color(Wasko::Color.color_from_string(color))
     end
 
     # ## Palette
