@@ -1,3 +1,4 @@
+require "wasko/terminal/ansi_colors"
 module Wasko
   # This class will be used to strip the Applescript
   # even further away, encapsulating all the needed
@@ -7,7 +8,7 @@ module Wasko
   # for [iTerm2](http://code.google.com/p/iterm2/) and
   # other variants.
   class Terminal
-
+    extend AnsiColors
     # Unsupported calls
     # Since Apple hasn't implemented them, no way to set
     # them, except to fall back to some GUI scripting
@@ -22,24 +23,8 @@ module Wasko
 
     end
 
-    # The color wells of the prefs have these indices
-    # (bright colors is +1)
-    #      black   : 4
-    #      red     : 6
-    #      green   : 8
-    #      yellow  : 10
-    #      blue    : 12
-    #      magenta : 14
-    #      cyan    : 16
-    #      white   : 18
-    def self.set_ansi_black_color(color);set_color_via_gui(5, color);end
-    def self.set_ansi_red_color(color);set_color_via_gui(7, color);end
-    def self.set_ansi_green_color(color);set_color_via_gui(9, color);end
-    def self.set_ansi_yellow_color(color);set_color_via_gui(11, color);end
-    def self.set_ansi_blue_color(color);set_color_via_gui(13, color);end
-    def self.set_ansi_magenta_color(color);set_color_via_gui(15, color);end
-    def self.set_ansi_cyan_color(color);set_color_via_gui(17, color);end
-    def self.set_ansi_white_color(color);set_color_via_gui(19, color);end
+
+
 
     def self.set_color_via_gui(color_index, color)
       Wasko::Applescript.run do
@@ -98,6 +83,72 @@ end tell
 SCRIPT
       end
     end
+
+    def self.set_selected_theme(theme_name)
+      output = Wasko::Applescript.run do
+        <<SCRIPT
+tell application "Terminal"
+  activate
+  tell application "System Events"
+    # Open Inspector
+    tell process "Terminal"
+      if window "Inspector" exists then
+      else
+        keystroke "I" using command down
+      end if
+      click radio button 2 of tab group 1 of window "Inspector"
+	    set srows to every row of table 1 of scroll area 1 of tab group 1 of window "Inspector"
+      set theme_found to false
+			repeat with a_row in srows
+        if value of text field of a_row contains "#{theme_name}" then
+          set theme_found to true
+          set selected of a_row to true
+        end if
+      end repeat
+
+      if theme_found then
+        # Theme selected
+        # Close inspector window
+        keystroke "w" using command down
+      else
+        keystroke "w" using command down
+        #{add_theme_script(theme_name)}
+        # Cleanup
+        keystroke "w" using command down
+        return "NOT_FOUND"
+      end if
+    end tell
+  end tell
+end tell
+SCRIPT
+      end
+
+      # Doing this in Ruby because Applescript is that much
+      # teh suck combined.
+      set_selected_theme(theme_name) if output == "NOT_FOUND"
+    end
+
+    # This string will add a new theme to the Terminal's preferences
+    # if evaluated by Applescript
+    def self.add_theme_script(theme_name)
+        <<SCRIPT
+tell application "Terminal"
+	activate
+	tell application "System Events"
+		# Open Preferences
+		keystroke "," using command down
+		tell process "Terminal"
+			# Create the wasko theme placeholder
+			click button 2 of tool bar 1 of window 1
+			click (every button whose description is "Add") of group 1 of window 1
+			keystroke "#{theme_name}"
+			key code 36 # hits return
+		end tell
+	end tell
+end tell
+SCRIPT
+      end
+
     # # Getters And Setters
     #
     # This supports the following

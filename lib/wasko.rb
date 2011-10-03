@@ -161,9 +161,11 @@ module Wasko
       set_selected_text_color p.colors[:selected].html
       set_selection_color p.colors[:selection].html
 
-      %w(black red green yellow blue magenta cyan white).each do |color|
-        eval "set_ansi_#{color}_color p.colors[:#{color}].html"
+      ansi_color_hash = %w(black red green yellow blue magenta cyan white).inject({}) do |result, element|
+        result[element.to_sym] = p.colors[element.to_sym].html
+        result
       end
+      advanced_typing_apparatus.set_ansi_colors(ansi_color_hash)
     end
 
   end
