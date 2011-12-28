@@ -22,7 +22,8 @@ module Wasko
     def advanced_typing_apparatus
       return Wasko::Terminal if current_application =~ /Terminal.app/
       return Wasko::Iterm if current_application =~ /iTerm.app/
-      nil
+      # Fall back to Terminal for CI
+      return Wasko::Terminal
     end
 
     # Gets the current active application
