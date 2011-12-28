@@ -6,8 +6,10 @@ class TestWasko < Test::Unit::TestCase
     setup do
       @color = Wasko::Color.color_from_string("white")
       palette = mock()
-      palette.expects(:colors).returns({:base => @color, :foreground => @color, :bold => @color, :cursor => @color}).at_least_once
+      palette.expects(:colors).returns({:base => @color, :foreground => @color, :bold => @color, :cursor => @color, :selected => @color, :selection => @color}).at_least_once
+      palette.expects(:ansi_colors?).returns(false)
       Wasko::Palette::TheOriginal.expects(:new).with("white").returns(palette)
+
     end
 
     should "draw a palette" do

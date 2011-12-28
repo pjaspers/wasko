@@ -31,6 +31,10 @@ module Wasko
         Wasko::Color.color_from_string("black")
       end
 
+      def ansi_colors?
+        p.colors[:yellow]
+      end
+
       # Checks the brightness of the base color and
       # returns the appropriate opposite color.
       #

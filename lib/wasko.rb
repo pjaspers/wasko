@@ -161,9 +161,12 @@ module Wasko
       set_selected_text_color p.colors[:selected].html
       set_selection_color p.colors[:selection].html
 
-      %w(black red green yellow blue magenta cyan white).each do |color|
-        eval "set_ansi_#{color}_color p.colors[:#{color}].html"
+      if p.ansi_colors?
+        %w(black red green yellow blue magenta cyan white).each do |color|
+          eval "set_ansi_#{color}_color p.colors[:#{color}].html"
+        end
       end
+
     end
 
   end
