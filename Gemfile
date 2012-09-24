@@ -1,13 +1,22 @@
 source "http://rubygems.org"
 
-gem "thor"
-gem "color"
-gem "rake","0.8.7"
+gemspec
 
 group :development do
-  gem "shoulda", ">= 0"
-  gem "mocha"
-  gem "bundler", "~> 1.0.0"
-  gem "jeweler", "~> 1.5.2"
-  gem "rcov", ">= 0"
+  # An IRB alternative and runtime developer console
+  # [pry](http://pry.github.com)
+  gem 'pry', '~> 0.9.10'
+end
+
+group :test do
+  # Adding rake for Travis.
+  gem 'rake'
+
+  # Making tests easy on the fingers and eyes
+  # [shoulda](https://github.com/thoughtbot/shoulda)
+  gem 'shoulda', '~> 3.1.1'
+
+  # Mocking and stubbing library
+  # [mocha](http://gofreerange.com/mocha/docs)
+  gem 'mocha', '~> 0.12.4'
 end
