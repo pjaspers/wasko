@@ -111,22 +111,22 @@ SCRIPT
 
 end
 
-			# tell window "Colors"
-			# 	#activate
-			# end tell
-			# tell window "Colors"
-			# 	tell tool bar 1
-			# 		click (every button whose description is "Color Sliders")
-			# 	end tell
+# tell window "Colors"
+# 	#activate
+# end tell
+# tell window "Colors"
+# 	tell tool bar 1
+# 		click (every button whose description is "Color Sliders")
+# 	end tell
 
-			# 	# Selecting RGB
-			# 	keystroke "2" using command down
-			# 	tell list 1 of group 1 of group 1 of group 1 of group 1 of group 1 of group 1
-			# 		set value of text field 1 to "1"
-			# 		set value of text field 2 to "1"
-			# 		set value of text field 3 to "1"
+# 	# Selecting RGB
+# 	keystroke "2" using command down
+# 	tell list 1 of group 1 of group 1 of group 1 of group 1 of group 1 of group 1
+# 		set value of text field 1 to "1"
+# 		set value of text field 2 to "1"
+# 		set value of text field 3 to "1"
 
-			# 		click (every text field whose value is "255")
-			# 		key code 36
-			# 	end tell
-			# end tell
+# 		click (every text field whose value is "255")
+# 		key code 36
+# 	end tell
+# end tell
