@@ -1,29 +1,25 @@
-# wasko
+# Wasko
 
 _The quickest way to set your Terminal palette._
 
 ## What is it?
 
-I needed a way to quickly set the background color from inside my Terminal, my use case was actually when changing projects; switch the background project. Since `Terminal.app` is really bad at allowing you do this quickly, I created this gem.
+I have a weird habit of having open too many Terminal windows that all look the same, so I needed a way to quickly make them different. Enter: Wasko.
+
+With wasko you can quickly change the background color of an open Terminal window, it does this by taking your desired color and mixing it with your default background color. So it doesn't look completely like someone vomited and then made a color scheme out of it (although if it does, try a different color).
 
 ## How does it work?
 
 If you just enter `wasko` it'll show you all available options (thanks to [thor](https://github.com/wycats/thor/))
 
-The main ones are:
+The one I use most is:
 
-* `wasko palette 001e26` which creates a color scheme with the supplied color as its base color
-* `wasko background yellow` which sets the background color
-* `wasko save myawesomecomicsanstheme` which saves the theme to `~/.wasko/myawesomecomicsanstheme.color`
+* `wasko -b red` which will update the background color. You can enter any valid css color, the world is your coloured oyster.
+
+You can also change the font etc, see the help for more:
+
 * `wasko font 48` is for all the presentation junkies.
 * `wasko font 14 DejaVuSansMono` makes your Terminal web 2.0-y
-
-## TODO
-
-* Terminal.app doesn't support selection color. Maybe go around it with some GUI applescripting. *rhymes with clucking bell*
-* ANSI Colors, figure out how to get hex to ansi
-* LSCOLORS, figure out how to set them for all terminals
-* Add default Apple themes to default install
 
 ## Contributing to wasko
 
@@ -40,4 +36,3 @@ The main ones are:
 
 Copyright (c) 2011 pjaspers. See LICENSE.txt for
 further details.
-
