@@ -7,7 +7,6 @@ class TestWasko < Test::Unit::TestCase
       @color = Wasko::Color.color_from_string("white")
       palette = mock()
       palette.expects(:colors).returns({:base => @color, :foreground => @color, :bold => @color, :cursor => @color, :selected => @color, :selection => @color}).at_least_once
-      palette.expects(:ansi_colors?).returns(false)
       Wasko::Palette::TheOriginal.expects(:new).with("white").returns(palette)
 
     end
@@ -84,7 +83,7 @@ class TestWasko < Test::Unit::TestCase
 
   # Test all getter/setter colors
   context "getting/setting regular colors" do
-    %w(background_color cursor_color foreground_color bold_color).each do |method|
+    %w(cursor_color foreground_color bold_color).each do |method|
 
       setup do
         @color = Wasko::Color.color_from_string("white")

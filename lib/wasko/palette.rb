@@ -94,6 +94,11 @@ module Wasko
         @base.mix_with(Wasko::Color.color_from_string(color_name), mix_value).adjust_brightness(brightness)
       end
 
+
+      def base_color_with_tint(color_name)
+        brightness = inverse_brightness * @contrast
+        mix_base_with(color_name, 80, brightness)
+      end
     end
   end
 end

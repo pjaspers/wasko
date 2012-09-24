@@ -11,6 +11,14 @@ module Wasko
       set_bold_color color
     end
 
+    # iTerm doesn't have a way to get back the original color,
+    # falling back to black for now.
+    #
+    # Returns an applescript color
+    def self.startup_background_color
+      "{0,0,0}"
+    end
+
     def self.method_missing(method_sym, *arguments, &block)
       if method_sym.to_s =~ /^set_(.*)$/
         self.set($1.gsub(/_/, " ") => arguments.first)

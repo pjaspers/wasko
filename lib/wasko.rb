@@ -42,8 +42,17 @@ module Wasko
       ::Color::RGB.from_applescript(advanced_typing_apparatus.background_color).html
     end
 
+    # Takes a color and mixes it with the original background color, so
+    # the newly generated color should look kinda like the other.
+    #
+    #       color - A string with a css or hex color
+    #
+    # Sets the background color
     def set_background_color(color)
-      advanced_typing_apparatus.set_background_color(Wasko::Color.color_from_string(color).to_applescript)
+      original_background = ::Color::RGB.from_applescript(advanced_typing_apparatus.startup_background_color).html
+      palette = Wasko::Palette::TheOriginal.new(original_background)
+      new_color = palette.base_color_with_tint(color)
+      advanced_typing_apparatus.set_background_color(new_color.to_applescript)
     end
 
     def foreground_color
@@ -161,13 +170,6 @@ module Wasko
       set_cursor_color p.colors[:cursor].html
       set_selected_text_color p.colors[:selected].html
       set_selection_color p.colors[:selection].html
-
-      if p.ansi_colors?
-        %w(black red green yellow blue magenta cyan white).each do |color|
-          eval "set_ansi_#{color}_color p.colors[:#{color}].html"
-        end
-      end
-
     end
 
   end

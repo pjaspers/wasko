@@ -6,33 +6,17 @@ require "wasko"
 require "thor"
 
 module Wasko
+  # [thor](http://github.com/wycats/thor)
   class CLI < Thor
     include Thor::Actions
 
-    map "-p" => :palette
     map "-b" => :background
     map "-c" => :cursor
     map "-t" => :text
     map "-f" => :font
     map "-s" => :strong
 
-    map "-w" => :save
-    map "-r" => :load
-
-    desc "palette COLOR", "Gets/sets both back and foreground color adjusted to supplied"
-    def palette(color = "")
-      if color.empty?
-        say Wasko.palette
-      else
-        if Wasko::Color.color_from_string(color)
-          Wasko.set_palette color
-        else
-          say "Sorry, please use a valid CSS color."
-        end
-      end
-    end
-
-    desc "text COLOR", "Gets/sets text color"
+    desc "text COLOR", "-t, Gets/sets text color"
     def text(color_name="")
       if color_name.empty?
         say Wasko.foreground_color
@@ -41,7 +25,7 @@ module Wasko
       end
     end
 
-    desc "strong COLOR", "Gets/sets the bold text color"
+    desc "strong COLOR", "-s, Gets/sets the bold text color"
     def strong(color_name="")
       if color_name.empty?
         say Wasko.bold_color
@@ -50,7 +34,7 @@ module Wasko
       end
     end
 
-    desc "background COLOR", "Gets/sets background color"
+    desc "background COLOR", "-b, Gets/sets background color"
     def background(color_name="")
       if color_name.empty?
         say Wasko.background_color
@@ -59,7 +43,7 @@ module Wasko
       end
     end
 
-    desc "cursor COLOR", "Gets/sets cursor color"
+    desc "cursor COLOR", "-c, Gets/sets cursor color"
     def cursor(color_name="")
       if color_name.empty?
         say Wasko.cursor_color
@@ -68,35 +52,12 @@ module Wasko
       end
     end
 
-    desc "font NAME SIZE", "Gets/sets font"
+    desc "font NAME SIZE", "-f, Gets/sets font"
     def font(font_name = "", font_size = 14)
       if font_name.empty?
         say Wasko.font
       else
         Wasko.set_font font_name, font_size
-      end
-    end
-
-    desc "load NAME", "Loads a stored theme"
-    def load(name="")
-      if name.empty?
-        say "Please pick a theme from: #{Wasko::Configuration.all_themes.join(", ")}"
-        return
-      end
-
-      if Wasko::Configuration.all_themes.include?(name)
-        Wasko::Configuration.load_colors!(name)
-      else
-        say "Please pick a theme from: [#{Wasko::Configuration.all_themes.join(", ")}]"
-      end
-    end
-
-    desc "save NAME", "Saves current scheme to ~/.wasko/"
-    def save(name)
-      if Wasko::Configuration.valid_name?(name)
-        Wasko::Configuration.save_colors!(name)
-      else
-        say "Invalid name, please use alphanumeric."
       end
     end
   end
