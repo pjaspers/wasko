@@ -2,6 +2,14 @@ require 'helper'
 
 class TestWasko < Test::Unit::TestCase
 
+  should "set background color to tint" do
+    ata = mock()
+    ata.expects(:startup_background_color).returns("{0,0,0}")
+    ata.expects(:set_background_color).with("{16962, 0, 0}").returns(nil)
+    Wasko.stubs(:advanced_typing_apparatus).returns(ata)
+    Wasko.set_background_color("red")
+  end
+
   context "setting palette" do
     setup do
       @color = Wasko::Color.color_from_string("white")

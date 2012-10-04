@@ -39,7 +39,11 @@ module Wasko
       if color_name.empty?
         say Wasko.background_color
       else
-        Wasko.set_background_color color_name
+        if Wasko::Color.color_from_string(color_name)
+          Wasko.set_background_color color_name
+        else
+          error "#{color_name} is not a color."
+        end
       end
     end
 

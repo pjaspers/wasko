@@ -43,9 +43,15 @@ module Wasko
     # At the moment support all named css-colors (like `red`, `aliceblue`, etc.)
     # and all hex-colors.
     def self.color_from_string(color_string)
-      return ::Color::RGB.from_html(color_string)             if hex_color?(color_string)
-      return ::Color::RGB.from_html(names_hash[color_string]) if named_color?(color_string)
-      false
+      color_string = color_string.downcase
+
+      if hex_color?(color_string)
+        return ::Color::RGB.from_html(color_string)
+      end
+
+      if named_color?(color_string)
+        return ::Color::RGB.from_html(names_hash[color_string])
+      end
     end
 
     # Looks through all the named css colors
