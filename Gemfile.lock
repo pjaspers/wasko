@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    wasko (0.2.0)
+    wasko (0.2.1)
       color
       thor
       thor (~> 0.15.4)
