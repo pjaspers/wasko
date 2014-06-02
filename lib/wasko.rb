@@ -1,5 +1,15 @@
+# coding: utf-8
+
+begin
+  require 'rubygems'
+rescue LoadError
+end
+
 require "color/palette/monocontrast"
 require "yaml"
+
+$:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
+
 # [Applescript: Small wrapper for running applescript](applescript.html)
 require "wasko/applescript"
 # [Terminal: Support for Terminal.app](terminal.html)
@@ -10,6 +20,7 @@ require "wasko/iterm"
 require "wasko/color"
 # [Palette: Generates a color scheme](palette.html)
 require "wasko/palette"
+require "wasko/palettes/original"
 # [Configuration: Loading and saving themes](configuration.html)
 require "wasko/configuration"
 
@@ -50,7 +61,7 @@ module Wasko
     # Sets the background color
     def set_background_color(color)
       original_background = ::Color::RGB.from_applescript(advanced_typing_apparatus.startup_background_color).html
-      palette = Wasko::Palette::TheOriginal.new(original_background)
+      palette = Wasko::Palette::Original.new(original_background)
       new_color = palette.base_color_with_tint(color)
       advanced_typing_apparatus.set_background_color(new_color.to_applescript)
     end
@@ -162,7 +173,7 @@ module Wasko
 
     # Try to set a sensible palette from a base color
     def set_palette(color_string)
-      p = Wasko::Palette::TheOriginal.new(color_string)
+      p = Wasko::Palette::Original.new(color_string)
 
       set_background_color p.colors[:base].html
       set_foreground_color p.colors[:foreground].html
