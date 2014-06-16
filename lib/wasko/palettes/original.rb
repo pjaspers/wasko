@@ -56,8 +56,8 @@ module Wasko
       def colors!
         p = {}
         p[:base]       = @base
-        p[:foreground] = @base.mix_with(opposite_color, @contrast + 18)
-        p[:bold]       = @base.mix_with(opposite_color, @contrast + 19.5)
+        p[:foreground] = @base.mix_with(opposite_color, @contrast + 0)
+        p[:bold]       = @base.mix_with(opposite_color, @contrast + 5)
         p[:selection]  = @base.adjust_brightness inverse_brightness * @contrast
         p[:selected]   = p[:bold]
         p[:cursor]     = p[:foreground]
