@@ -15,6 +15,7 @@ module Wasko
     map "-t" => :text
     map "-f" => :font
     map "-s" => :strong
+    map "-p" => :palette
 
     desc "text COLOR", "-t, Gets/sets text color"
     def text(color_name="")
@@ -41,6 +42,19 @@ module Wasko
       else
         if Wasko::Color.color_from_string(color_name)
           Wasko.set_background_color color_name
+        else
+          error "#{color_name} is not a color."
+        end
+      end
+    end
+
+    desc "palette COLOR", "-b, Gets/sets background color"
+    def palette(color_name="")
+      if color_name.empty?
+        say Wasko.palette
+      else
+        if Wasko::Color.color_from_string(color_name)
+          Wasko.set_palette color_name
         else
           error "#{color_name} is not a color."
         end

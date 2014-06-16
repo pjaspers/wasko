@@ -60,10 +60,8 @@ module Wasko
     #
     # Sets the background color
     def set_background_color(color)
-      original_background = ::Color::RGB.from_applescript(advanced_typing_apparatus.startup_background_color).html
-      palette = Wasko::Palette::Original.new(original_background)
-      new_color = palette.base_color_with_tint(color)
-      advanced_typing_apparatus.set_background_color(new_color.to_applescript)
+      color = Wasko::Color.color_from_string(color)
+      advanced_typing_apparatus.set_background_color(color.to_applescript)
     end
 
     def foreground_color

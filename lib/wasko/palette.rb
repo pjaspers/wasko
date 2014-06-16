@@ -18,6 +18,19 @@ module Wasko
         colors!
       end
 
+      # Returns a `color`-instance of white
+      def white
+        Wasko::Color.color_from_string("white")
+      end
+
+      # Returns a `color`-instance of black
+      def black
+        Wasko::Color.color_from_string("black")
+      end
+
+      def ansi_colors?
+        p.colors[:yellow]
+      end
 
     end
   end

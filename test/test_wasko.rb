@@ -4,8 +4,7 @@ describe Wasko do
 
   it "set background color to tint" do
     ata = mock()
-    ata.expects(:startup_background_color).returns("{0,0,0}")
-    ata.expects(:set_background_color).with("{16962, 0, 0}").returns(nil)
+    ata.expects(:set_background_color).with("{65535, 0, 0}").returns(nil)
     Wasko.stubs(:advanced_typing_apparatus).returns(ata)
     Wasko.set_background_color("red")
   end
