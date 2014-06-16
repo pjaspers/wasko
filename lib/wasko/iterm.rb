@@ -2,6 +2,22 @@ module Wasko
   # Adds support for [iTerm2](http://code.google.com/p/iterm2/)
   class Iterm
 
+    def self.normal_text_color
+      foreground_color
+    end
+
+    def self.font_name
+      'Not supported'
+    end
+
+    def self.font_size
+      'Not supported'
+    end
+
+    def self.bold_text_color
+      bold_color
+    end
+
     # Terminal.app uses a slightly different terminology
     def self.set_normal_text_color(color)
       set_foreground_color color
