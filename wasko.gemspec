@@ -15,10 +15,9 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   gem.version       = Wasko::VERSION
 
-  gem.add_runtime_dependency("thor", ["~> 0.15.4"])
   gem.add_runtime_dependency 'color'
   gem.add_runtime_dependency 'thor'
-
+  gem.add_runtime_dependency 'rake'
   gem.add_development_dependency 'shoulda'
   gem.add_development_dependency 'mocha'
 end

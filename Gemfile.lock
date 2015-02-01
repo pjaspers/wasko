@@ -3,8 +3,8 @@ PATH
   specs:
     wasko (0.2.1)
       color
+      rake
       thor
-      thor (~> 0.15.4)
 
 GEM
   remote: http://rubygems.org/
@@ -13,7 +13,7 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     coderay (1.0.7)
-    color (1.6)
+    color (1.7)
     i18n (0.6.1)
     metaclass (0.0.4)
     method_source (0.8)
@@ -25,7 +25,7 @@ GEM
       coderay (~> 1.0.5)
       method_source (~> 0.8)
       slop (~> 3.3.1)
-    rake (0.8.7)
+    rake (10.3.2)
     shoulda (3.1.1)
       shoulda-context (~> 1.0)
       shoulda-matchers (~> 1.2)
@@ -42,6 +42,6 @@ DEPENDENCIES
   minitest (~> 5.3.2)
   mocha (~> 1.0.0)
   pry (~> 0.9.10)
-  rake
+  rake (~> 10.3.2)
   shoulda
   wasko!

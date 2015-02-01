@@ -1,9 +1,7 @@
 # coding: utf-8
 
-begin
-  require 'rubygems'
-rescue LoadError
-end
+require "bundler"
+Bundler.setup
 
 require "color/palette/monocontrast"
 require "yaml"
@@ -34,7 +32,7 @@ module Wasko
       return Wasko::Terminal if current_application =~ /Terminal.app/
       return Wasko::Iterm if current_application =~ /iTerm.app/
       # Fall back to Terminal for CI
-      return Wasko::Terminal
+      Wasko::Terminal
     end
 
     # Gets the current active application
