@@ -1,6 +1,5 @@
 module Wasko
   module Palette
-
     class Plain < Base
 
       # Hash of the color palette

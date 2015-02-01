@@ -48,7 +48,7 @@ module Wasko
       end
     end
 
-    desc "palette COLOR", "-b, Gets/sets background color"
+    desc "palette COLOR", "-p, Gets/sets background color"
     def palette(color_name="")
       if color_name.empty?
         say Wasko.palette
