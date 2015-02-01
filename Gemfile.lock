@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    wasko (0.2.1)
+    wasko (0.2.2)
       color
       rake
       thor
