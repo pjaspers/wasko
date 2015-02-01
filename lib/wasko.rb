@@ -1,8 +1,5 @@
 # coding: utf-8
 
-require "bundler"
-Bundler.setup
-
 require "color/palette/monocontrast"
 require "yaml"
 
