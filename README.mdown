@@ -6,7 +6,7 @@ _The quickest way to set your Terminal palette._
 
 I have a weird habit of having open too many Terminal windows that all look the same, so I needed a way to quickly make them different. Enter: Wasko.
 
-With wasko you can quickly change the background color of an open Terminal window, it does this by taking your desired color and mixing it with your default background color. So it doesn't look completely like someone vomited and then made a color scheme out of it (although if it does, try a different color).
+With wasko you can quickly change the background color of an open Terminal window, it does this by taking your desired color and trying to get other colors that kinda match it. So it shouldn't look like someone vomited and then made a color scheme out of it (although if it does, try a different color).
 
 ## How does it work?
 
@@ -14,7 +14,7 @@ If you just enter `wasko` it'll show you all available options (thanks to [thor]
 
 The one I use most is:
 
-* `wasko -b red` which will update the background color. You can enter any valid css color, the world is your coloured oyster.
+* `wasko -p red` which will update the background color, and font colors. You can enter any valid css color, the world is your coloured oyster.
 
 You can also change the font etc, see the help for more:
 
@@ -33,6 +33,4 @@ You can also change the font etc, see the help for more:
 
 #@ Copyright
 
-
-Copyright (c) 2011 pjaspers. See LICENSE.txt for
-further details.
+Copyright (c) 201[0-9] pjaspers. See LICENSE.txt for further details.
