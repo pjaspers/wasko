@@ -8,7 +8,7 @@ I have a weird habit of having open too many Terminal windows that all look the 
 
 With wasko you can quickly change the background color of an open Terminal window, it does this by taking your desired color and trying to get other colors that kinda match it. So it shouldn't look like someone vomited and then made a color scheme out of it (although if it does, try a different color).
 
-![demo](http://f.cl.ly/items/3M3q050T3A1w0n091C1R/out.gif)
+![demo](http://cl.ly/image/0l0z0P3H3d03/wasko.gif)
 
 ## How does it work?
 
