@@ -45,6 +45,10 @@ module Wasko
     def self.color_from_string(color_string)
       color_string = color_string.downcase
 
+      if "hexclock" == color_string
+        return ::Color::RGB.from_html(Time.now.strftime("#%H%M%S"))
+      end
+
       if hex_color?(color_string)
         return ::Color::RGB.from_html(color_string)
       end
