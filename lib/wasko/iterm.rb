@@ -1,6 +1,17 @@
 module Wasko
   # Adds support for [iTerm2](http://code.google.com/p/iterm2/)
   class Iterm
+    def self.new_applescript?
+      # https://www.iterm2.com/documentation-scripting.html
+      version = Wasko::Applescript.run do
+        <<SCRIPT
+tell application "iTerm2"
+    version
+end tell
+SCRIPT
+      end
+      version.split(".").first.to_i >= 3
+    end
 
     def self.normal_text_color
       foreground_color
@@ -80,11 +91,22 @@ module Wasko
       unless value =~ /^(\{|\[|\()/
         value = "\"#{value}\""
       end
-      <<SCRIPT
+
+      if new_applescript?
+        <<SCRIPT
 tell application "iTerm"
-  set #{object} of current session of current terminal to #{value}
+    tell current session of current window
+        set #{object} to #{value}
+    end tell
 end tell
 SCRIPT
+      else
+        <<SCRIPT
+tell application "iTerm"
+      set #{object} of current session of current terminal to #{value}
+end tell
+SCRIPT
+      end
     end
 
     # Getter
@@ -92,12 +114,21 @@ SCRIPT
     #      Wasko::Terminal.get_script("background color")
     #
     def self.get_script(object)
-      <<SCRIPT
+      if new_applescript?
+        <<SCRIPT
+tell application "iTerm"
+    tell current session of current window
+        get #{object}
+    end tell
+end tell
+SCRIPT
+      else
+        <<SCRIPT
 tell application "iTerm"
   get #{object} of current session of current terminal
 end tell
 SCRIPT
+      end
     end
-
   end
 end
