@@ -1,9 +1,9 @@
 require 'helper'
 
-describe Wasko::Terminal do
+describe Wasko::TerminalApp do
   describe "defining dynamic methods" do
     before do
-      @terminal = Wasko::Terminal
+      @terminal = Wasko::TerminalApp.new
     end
 
     %w(background_color normal_text_color font_size font_name cursor_color).each do |method|

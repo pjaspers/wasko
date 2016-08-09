@@ -9,6 +9,7 @@ $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 require "wasko/applescript"
 # [Terminal: Support for Terminal.app](terminal.html)
 require "wasko/terminal"
+require "wasko/terminals/terminal_app"
 # [iTerm: Support for iTerm.app](iterm.html)
 require "wasko/iterm"
 # [Color: Small color utilities](color.html)
@@ -26,10 +27,10 @@ module Wasko
     # in the future this could be used to support other
     # Terminals as well.
     def advanced_typing_apparatus
-      return Wasko::Terminal if current_application =~ /Terminal.app/
-      return Wasko::Iterm if current_application =~ /iTerm.app/
+      return Wasko::TerminalApp.new if current_application =~ /Terminal.app/
+      return Wasko::Iterm.new if current_application =~ /iTerm.app/
       # Fall back to Terminal for CI
-      Wasko::Terminal
+      Wasko::TerminalApp.new
     end
 
     # Gets the current active application
