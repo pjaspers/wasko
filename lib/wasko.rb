@@ -7,11 +7,14 @@ $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 
 # [Applescript: Small wrapper for running applescript](applescript.html)
 require "wasko/applescript"
-# [Terminal: Support for Terminal.app](terminal.html)
+
 require "wasko/terminal"
+# [Terminal: Support for Terminal.app](terminal_app.html)
 require "wasko/terminals/terminal_app"
-# [iTerm: Support for iTerm.app](iterm.html)
-require "wasko/iterm"
+# # [iTerm: Support for iTerm.app](iterm.html)
+require "wasko/terminals/iterm_legacy"
+require "wasko/terminals/iterm"
+
 # [Color: Small color utilities](color.html)
 require "wasko/color"
 # [Palette: Generates a color scheme](palette.html)
@@ -177,5 +180,88 @@ module Wasko
       set_selection_color p.colors[:selection].html
     end
 
+    def uber_ding
+      <<-SCRIPT
+oon theSplit(theString, theDelimiter)
+  set oldDelimiters to AppleScript's text item delimiters
+  set AppleScript's text item delimiters to theDelimiter
+  set theArray to every text item of theString
+  set AppleScript's text item delimiters to oldDelimiters
+  return theArray
+end theSplit
+
+on IsModernVersion(version)
+  set myArray to my theSplit(version, ".")
+  set major to item 1 of myArray
+  set minor to item 2 of myArray
+  set veryMinor to item 3 of myArray
+
+  if major < 2 then
+    return false
+  end if
+  if major > 2 then
+    return true
+  end if
+  if minor < 9 then
+    return false
+  end if
+  if minor > 9 then
+    return true
+  end if
+  if veryMinor < 20140903 then
+    return false
+  end if
+  return true
+end IsModernVersion
+
+on NewScript()
+  return "tell application \\"iTerm\\"
+    tell current session of current window
+        set background color to {65535, 0, 0}
+    end tell
+end tell
+"
+end NewScript
+
+on OldScript()
+  -- Return the legacy script as a string here; what follows is an example.
+  return "tell application \\"iTerm\\"
+      set background color of current session of current terminal to {65535, 0, 0}
+end tell
+"
+end OldScript
+
+on WhatTheApp()
+  set appname to get name of (info for (path to frontmost application))
+  return appname
+end WhatTheApp
+
+set myApp to my WhatTheApp()
+
+tell application "iTerm"
+  if my IsModernVersion(version) then
+    set myScript to my NewScript()
+  else
+    set myScript to my OldScript()
+  end if
+end tell
+
+on TerminalScript()
+  return "tell application \\"Terminal\\"
+  set background color of selected tab of first window to {65535, 0, 0}
+end tell"
+end TerminalScript
+
+set fullScript to "tell application \\"iTerm\\"
+" & myScript & "
+end tell"
+
+if myApp = "iTerm.app" then
+  run script fullScript
+else
+  run script TerminalScript()
+end if
+    SCRIPT
+    end
   end
 end
