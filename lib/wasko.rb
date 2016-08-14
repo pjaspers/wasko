@@ -5,6 +5,7 @@ require "yaml"
 
 $:.unshift File.join(File.dirname(__FILE__), *%w[.. lib])
 
+require "wasko/errors"
 # [Applescript: Small wrapper for running applescript](applescript.html)
 require "wasko/applescript"
 
