@@ -1,255 +1,112 @@
 module Wasko
-  # This class will be used to strip the Applescript
-  # even further away, encapsulating all the needed
-  # methods to set colors and fonts of `Terminal.app`.
+  # A base class that defines most of the methods and expects its
+  # subclasses to implement the `get_script` and `set_script` methods.
   #
-  # Added bonus is, this paves the way to add support
-  # for [iTerm2](http://code.google.com/p/iterm2/) and
-  # other variants.
+  # This allows for a plugin-style setup. At the moment the following
+  # are implemented:
+  #
+  #      - Terminal.app
+  #      - iTerm.app < v3
+  #      - iTerm.app v3
+  #
   class Terminal
-
-    # Unsupported calls
-    # Since Apple hasn't implemented them, no way to set
-    # them, except to fall back to brittle GUI scripting
-    # and I'm not really looking forward to doing that.
+    # Define the methods that will transfrom an applescript noun to a ruby method
+    # e.g.
     #
-    # So that's why you should use iTerm2.
-    def self.set_selected_text_color(color);end
-    def self.set_selection_color(color);end
-    def self.set_ansi_black_color(color);end
-    def self.set_ansi_red_color(color);end
-    def self.set_ansi_green_color(color);end
-    def self.set_ansi_yellow_color(color);end
-    def self.set_ansi_blue_color(color);end
-    def self.set_ansi_magenta_color(color);end
-    def self.set_ansi_cyan_color(color);end
-    def self.set_ansi_white_color(color);end
-
-    # If you don't like that option I've sent a pull request
-    # to iTerm2 which has ansi applescript support
-    def self.set_selected_text_color(color)
-      # Still no dice.
+    #      normal text color => normal_text_color
+    #
+    def self.getter_for_applescript_noun(noun)
+      noun.split(" ").join("_")
     end
 
-    def self.set_selection_color(color)
-
+    def self.setter_for_applescript_noun(noun)
+      "set_%s" % noun.split(" ").join("_")
     end
 
-    # The basic background color, since wasko never changes it,
-    # it can always be used as the baseline for creating new
-    # color mixes.
+    # ## Colors
     #
-    # Returns an applescript color
-    def self.startup_background_color
-      Wasko::Applescript.run do
-      <<SCRIPT
-tell application "Terminal"
-	get background color of startup settings
-end tell
-SCRIPT
+    # A list of all available color nouns, these are all the nouns that deal with a color.
+    #
+    COLOR_NOUNS = [
+      "cursor color", "background color", "normal text color",
+      "selected text color", "selection color",
+      "ansi black color", "ansi red color", "ansi green color",
+      "ansi yellow color", "ansi blue color", "ansi magenta color",
+      "ansi cyan color", "ansi white color"
+    ]
+    # This will generate these methods:
+    #
+    # def cursor_color; end              def set_cursor_color; end
+    # def background_color;end           def set_background_color(color);end
+    # def normal_text_color;end          def set_normal_text_color(color);end
+    # def selected_text_color(color);end def set_selected_text_color(color);end
+    # def selection_color(color); end    def set_selection_color(color);end
+    # def ansi_black_color;end           def set_ansi_black_color(color);end
+    # def ansi_red_color;end             def set_ansi_red_color(color);end
+    # def ansi_green_color;end           def set_ansi_green_color(color);end
+    # def ansi_yellow_color;end          def set_ansi_yellow_color(color);end
+    # def ansi_blue_color;end            def set_ansi_blue_color(color);end
+    # def ansi_magenta_color;end         def set_ansi_magenta_color(color);end
+    # def ansi_cyan_color;end            def set_ansi_cyan_color(color);end
+    # def ansi_white_color;end           def set_ansi_white_color(color);end
+    #
+    # Dynamically defines the getter and setter method for the noun.
+    def self.apply_colour_noun(noun)
+      define_method getter_for_applescript_noun(noun) do
+        get_script(noun)
+      end
+
+      define_method setter_for_applescript_noun(noun) do |color|
+        color = ensure_color(color)
+        set_script(noun, color)
       end
     end
 
+    COLOR_NOUNS.each do |applescript_noun|
+      apply_colour_noun(applescript_noun)
+    end
 
-    def self.set_color_via_gui(color_index, color)
-      Wasko::Applescript.run do
-        <<SCRIPT
-tell application "Terminal"
-  activate
-  tell application "System Events"
-    # Open Preferences
-    keystroke "," using command down
-    tell process "Terminal"
-      click button 2 of tool bar 1 of window 1
-      # Make sure the default is selected
-      set srows to every row of table 1 of scroll area 1 of group 1 of window 1
-      repeat with a_row in srows
-        if value of text field 1 of a_row contains "#{get_selected_theme}" then
-          set selected of a_row to true
-          exit repeat
-        end if
-      end repeat
+    # ## Fonts
+    #
+    FONT_NOUNS = [
+      "font size", "font name"
+    ]
+    # This will generate these methods:
+    #
+    #     def font_size;end    def set_font_size(size);end
+    #     def font_name;end    def set_font_name(name);end
+    #
+    # Dynamically defines the getter and setter method for the noun.
+    #
+    FONT_NOUNS.each do |applescript_noun|
+      define_method getter_for_applescript_noun(applescript_noun) do
+        get_script(applescript_noun)
+      end
 
-      click color well #{color_index} of tab group 1 of group 1 of window "Settings"
-      click (every button whose description is "Hex Color Picker") of tool bar 1 of window "Colors"
-      set value of text field 1 of group 1 of window "Colors" to "#{color.html}"
-      # Close Colors
-      click button 1 of window "Colors"
-      # Close prefs
-      keystroke "w" using command down
-    end tell
-  end tell
-end tell
-SCRIPT
+      define_method setter_for_applescript_noun(applescript_noun) do |value|
+        set_script(applescript_noun, value)
       end
     end
 
-    def self.get_selected_theme
-      @selected_theme ||=
-        Wasko::Applescript.run do
-        <<SCRIPT
-tell application "Terminal"
-  activate
-  tell application "System Events"
-    # Open Inspector
-    tell process "Terminal"
-      if window "Inspector" exists then
+    # Helper method to ensure an applescript color is returned
+    def ensure_color(color)
+      if ::Color === color
+        color.to_applescript
       else
-        keystroke "I" using command down
-      end if
-      click radio button 2 of tab group 1 of window "Inspector"
-      set selected_theme to value of text field of item 1 of (every row whose selected is true) of table 1 of scroll area 1 of tab group 1 of window "Inspector"
-      click button 1 of window "Inspector"
-      return selected_theme
-    end tell
+        if color = Color.color_from_string(color)
+          color.to_applescript
+        else
 
-  end tell
-end tell
-SCRIPT
+        end
       end
     end
 
-    def self.set_selected_theme(theme_name)
-      output = Wasko::Applescript.run do
-        <<SCRIPT
-tell application "Terminal"
-  activate
-  tell application "System Events"
-    # Open Inspector
-    tell process "Terminal"
-      if window "Inspector" exists then
-      else
-        keystroke "I" using command down
-      end if
-      click radio button 2 of tab group 1 of window "Inspector"
-	    set srows to every row of table 1 of scroll area 1 of tab group 1 of window "Inspector"
-      set theme_found to false
-			repeat with a_row in srows
-        if value of text field of a_row contains "#{theme_name}" then
-          set theme_found to true
-          set selected of a_row to true
-        end if
-      end repeat
-
-      if theme_found then
-        # Theme selected
-        # Close inspector window
-        keystroke "w" using command down
-      else
-        keystroke "w" using command down
-        #{add_theme_script(theme_name)}
-        # Cleanup
-        keystroke "w" using command down
-        return "NOT_FOUND"
-      end if
-    end tell
-  end tell
-end tell
-SCRIPT
-      end
-
-      # Doing this in Ruby because Applescript is that much
-      # teh suck combined.
-      set_selected_theme(theme_name) if output == "NOT_FOUND"
+    def get_script(applescript_noun)
+      fail "Implement me"
     end
 
-    # This string will add a new theme to the Terminal's preferences
-    # if evaluated by Applescript
-    def self.add_theme_script(theme_name)
-        <<SCRIPT
-tell application "Terminal"
-	activate
-	tell application "System Events"
-		# Open Preferences
-		keystroke "," using command down
-		tell process "Terminal"
-			# Create the wasko theme placeholder
-			click button 2 of tool bar 1 of window 1
-			click (every button whose description is "Add") of group 1 of window 1
-			keystroke "#{theme_name}"
-			key code 36 # hits return
-		end tell
-	end tell
-end tell
-SCRIPT
-      end
-
-    # # Getters And Setters
-    #
-    # This supports the following
-    #
-    #  * `set_background_color "fff"`
-    #  * `background_color`
-    #  * `set_normal_text_color "fff"`
-    #  * `normal_text_color`
-    #  * `set_font_size 12`
-    #  * `font_size`
-    #  * `set_font_name "DejaVu Sans Mono"`
-    #  * `font_name`
-    #
-    def self.method_missing(method_sym, *arguments, &block)
-      if method_sym.to_s =~ /^set_(.*)$/
-        self.set($1.gsub(/_/, " ") => arguments.first)
-      elsif method_sym.to_s =~ /^([a-z]+_[a-z]+(.*))$/
-        self.get($1.gsub(/_/, " "))
-      else
-        super
-      end
+    def set_script(applescript_noun, value)
+      fail "Implement me"
     end
-
-    # Pretty big todo, shield this off somewhat.
-    def self.respond_to?(method_sym, include_private = false)
-      if method_sym.to_s =~ /^set_(.*)$/
-        true
-      elsif method_sym.to_s =~ /^[a-z]+_[a-z]+(.*)$/
-        true
-      else
-        super
-      end
-    end
-
-    protected
-
-    def self.set(conditions = {})
-      Wasko::Applescript.run do
-        self.set_script(conditions.keys.first, conditions.values.first)
-      end
-    end
-
-    def self.get(object)
-      Wasko::Applescript.run do
-        self.get_script(object)
-      end
-    end
-
-    # ## Utility methods
-    #
-    # Setter
-    #
-    #      Wasko::Terminal.set_script("background color", "red")
-    #
-    def self.set_script(object, value)
-      unless value =~ /^(\{|\[|\()/
-        value = "\"#{value}\""
-      end
-      <<SCRIPT
-tell application "Terminal"
-  set #{object} of selected tab of first window to #{value}
-end tell
-SCRIPT
-    end
-
-    # Getter
-    #
-    #      Wasko::Terminal.get_script("background color")
-    #
-    def self.get_script(object)
-      <<SCRIPT
-tell application "Terminal"
-  get #{object} of selected tab of first window
-end tell
-SCRIPT
-    end
-
   end
 end
